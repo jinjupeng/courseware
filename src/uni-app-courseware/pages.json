@@ -97,7 +97,7 @@
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "起凡课件助手",
+		"navigationBarTitleText": "课件助手",
 		"navigationBarBackgroundColor": "#ffffff",
 		"backgroundColor": "#f0f0f0"
 	}

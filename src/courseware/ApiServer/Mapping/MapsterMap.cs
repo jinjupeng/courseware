@@ -1,6 +1,4 @@
-﻿using ApiServer.Model.Entity;
-using ApiServer.Model.Model;
-using Mapster;
+﻿using Mapster;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ApiServer.Model.Model
+﻿namespace ApiServer.Model.Model
 {
     public class WXAuth
     {

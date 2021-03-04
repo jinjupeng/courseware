@@ -1,9 +1,12 @@
-﻿using System;
+﻿using ApiServer.Common;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ApiServer.Model.Model
 {
     public class Result<T> where T : class
     {
+        private readonly List<EnumEntity> resultCodeList = EnumHelper.EnumToList<ResultCode>();
 
         /// <summary>
         /// 操作代码
@@ -26,40 +29,40 @@ namespace ApiServer.Model.Model
 
         public Result(ResultCode resultCode)
         {
-            this.code = resultCode.code();
-            this.message = resultCode.message();
+            this.code = int.Parse(resultCode.ToString());
+            this.message = resultCodeList.Single(a => a.EnumValue == this.code).EnumName;
         }
 
         public Result(ResultCode resultCode, T data)
         {
-            this.code = resultCode.code();
-            this.message = resultCode.message();
+            this.code = int.Parse(resultCode.ToString());
+            this.message = resultCodeList.Single(a => a.EnumValue == this.code).EnumName;
             this.data = data;
         }
 
-        public Result(String message)
+        public Result(string message)
         {
             this.message = message;
         }
 
-        public static Result SUCCESS()
+        public static Result<T> SUCCESS()
         {
-            return new Result(ResultCode.SUCCESS);
+            return new Result<T>(ResultCode.SUCCESS);
         }
 
-        public static <T> Result SUCCESS(T data)
+        public static Result<T> SUCCESS(T data)
         {
-            return new Result(ResultCode.SUCCESS, data);
+            return new Result<T>(ResultCode.SUCCESS, data);
         }
 
-        public static Result FAIL()
+        public static Result<T> FAIL()
         {
-            return new Result(ResultCode.FAIL);
+            return new Result<T>(ResultCode.FAIL);
         }
 
-        public static Result FAIL(String message)
+        public static Result<T> FAIL(string message)
         {
-            return new Result(message);
+            return new Result<T>(message);
         }
     }
 }

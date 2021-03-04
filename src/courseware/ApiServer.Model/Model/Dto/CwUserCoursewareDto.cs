@@ -9,7 +9,7 @@ namespace ApiServer.Model.Model.Dto
 
         public int userId { get; set; }
         public user user { get; set; }
-        public cw_courseware courseware { get; set; }
+        public cwCourseware courseware { get; set; }
         public int cwId { get; set; }
 
         public DateTime createTime { get; set; }

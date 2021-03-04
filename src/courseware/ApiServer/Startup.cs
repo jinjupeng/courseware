@@ -9,7 +9,6 @@ using Autofac;
 using Item.ApiServer.BLL.BLLModule;
 using Item.ApiServer.DAL.DALModule;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

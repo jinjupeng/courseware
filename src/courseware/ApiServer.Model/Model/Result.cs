@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ApiServer.Model.Model
 {
-    public class Result<T> where T : class
+    public class Result
     {
         private readonly List<EnumEntity> resultCodeList = EnumHelper.EnumToList<ResultCode>();
 
@@ -21,7 +21,7 @@ namespace ApiServer.Model.Model
         /// <summary>
         /// 结果数据
         /// </summary>
-        public T data { get; set; }
+        public object data { get; set; }
 
         public Result()
         {
@@ -33,7 +33,7 @@ namespace ApiServer.Model.Model
             this.message = resultCodeList.Single(a => a.EnumValue == this.code).EnumName;
         }
 
-        public Result(ResultCode resultCode, T data)
+        public Result(ResultCode resultCode, object data)
         {
             this.code = int.Parse(resultCode.ToString());
             this.message = resultCodeList.Single(a => a.EnumValue == this.code).EnumName;
@@ -45,24 +45,24 @@ namespace ApiServer.Model.Model
             this.message = message;
         }
 
-        public static Result<T> SUCCESS()
+        public static Result SUCCESS()
         {
-            return new Result<T>(ResultCode.SUCCESS);
+            return new Result(ResultCode.SUCCESS);
         }
 
-        public static Result<T> SUCCESS(T data)
+        public static Result SUCCESS(object data)
         {
-            return new Result<T>(ResultCode.SUCCESS, data);
+            return new Result(ResultCode.SUCCESS, data);
         }
 
-        public static Result<T> FAIL()
+        public static Result FAIL()
         {
-            return new Result<T>(ResultCode.FAIL);
+            return new Result(ResultCode.FAIL);
         }
 
-        public static Result<T> FAIL(string message)
+        public static Result FAIL(string message)
         {
-            return new Result<T>(message);
+            return new Result(message);
         }
     }
 }

@@ -1,6 +1,11 @@
-﻿namespace ApiServer.BLL.IBLL
+﻿using ApiServer.Model.Model.Dto;
+using System.Collections.Generic;
+
+namespace ApiServer.BLL.IBLL
 {
-    interface ICwUserCoursewareService
+    public interface ICwUserCoursewareService
     {
+
+        List<CwUserCoursewareDto> GetMyCW();
     }
 }

@@ -1,6 +1,8 @@
 ﻿namespace ApiServer.BLL.IBLL
 {
-    interface ICwExchangeKeyService
+    public interface ICwExchangeKeyService
     {
+
+        bool Use(string key);
     }
 }

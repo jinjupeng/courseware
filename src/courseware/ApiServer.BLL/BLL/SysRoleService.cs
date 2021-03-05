@@ -2,7 +2,7 @@
 
 namespace ApiServer.BLL.BLL
 {
-    class SysRoleService : ISysRoleService
+    public class SysRoleService : ISysRoleService
     {
     }
 }

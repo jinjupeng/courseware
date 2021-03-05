@@ -2,7 +2,7 @@
 
 namespace ApiServer.BLL.BLL
 {
-    class CwExchangeKeyService : ICwExchangeKeyService
+    public class CwExchangeKeyService : ICwExchangeKeyService
     {
     }
 }

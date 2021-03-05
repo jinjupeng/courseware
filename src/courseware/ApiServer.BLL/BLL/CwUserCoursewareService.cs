@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ApiServer.BLL.BLL
 {
-    class CwUserCoursewareService : ICwUserCoursewareService
+    public class CwUserCoursewareService : ICwUserCoursewareService
     {
         public List<CwUserCoursewareDto> GetMyCW()
         {

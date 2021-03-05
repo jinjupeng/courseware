@@ -2,7 +2,7 @@
 
 namespace ApiServer.BLL.BLL
 {
-    class CwOrderService : ICwOrderService
+    public class CwOrderService : ICwOrderService
     {
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ApiServer.BLL.BLL
 {
-    class SysRolePermissionService : ISysRolePermissionService
+    public class SysRolePermissionService : ISysRolePermissionService
     {
         public int delete(string url)
         {

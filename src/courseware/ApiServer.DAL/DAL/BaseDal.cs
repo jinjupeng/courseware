@@ -5,62 +5,360 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace ApiServer.DAL.DAL
 {
     public class BaseDal<T> : IBaseDal<T> where T : class
     {
-        public readonly DbContext DbContext = (new ContextProvider()).GetContext();
+        /// <summary>
+        /// EF上下文对象
+        /// </summary>
+        private readonly ContextMySql _context;
 
-        public void AddRange(IEnumerable<T> t)
+        public BaseDal(ContextMySql context)
         {
-            DbContext.Set<T>().AddRangeAsync(t);
+            this._context = context;
         }
-        public void AddRange(params T[] t)
+
+        /// <summary>
+        /// 新增实体
+        /// </summary>
+        /// <param name="model">新增的实体</param>
+        public void Add(T model)
         {
-            DbContext.Set<T>().AddRangeAsync(t);
+            _context.Set<T>().Add(model);
         }
-        public void DeleteRange(IEnumerable<T> t)
+
+        /// <summary>
+        /// 新增实体
+        /// </summary>
+        /// <param name="model">新增的实体</param>
+        public async Task AddAsync(T model)
         {
-            DbContext.Set<T>().RemoveRange(t);
+            await _context.Set<T>().AddAsync(model);
         }
-        public void DeleteRange(params T[] t)
+
+        /// <summary>
+        /// 新增实体
+        /// </summary>
+        /// <param name="model">新增的实体</param>
+        public void AddRange(IEnumerable<T> model)
         {
-            DbContext.Set<T>().RemoveRange(t);
+            _context.Set<T>().AddRange(model);
         }
-        public void UpdateRange(IEnumerable<T> t)
+
+        /// <summary>
+        /// 新增实体
+        /// </summary>
+        /// <param name="model">新增的实体</param>
+        public async Task AddRangeAsync(IEnumerable<T> model)
         {
-            DbContext.Set<T>().UpdateRange(t);
+            await _context.Set<T>().AddRangeAsync(model);
         }
-        public void UpdateRange(params T[] t)
+        
+        /// <summary>
+        /// 新增实体并保存
+        /// </summary>
+        /// <param name="model">新增的实体</param>
+        /// <returns>受影响的行数</returns>
+        public int AddAndSave(T model)
         {
-            DbContext.Set<T>().UpdateRange(t);
+            Add(model);
+            return _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 新增实体并保存
+        /// </summary>
+        /// <param name="model">新增的实体</param>
+        /// <returns>受影响的行数</returns>
+        public async Task<int> AddAndSaveAsync(T model)
+        {
+            await AddAsync(model);
+            return await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 新增实体并保存
+        /// </summary>
+        /// <param name="model">新增的实体</param>
+        /// <returns>受影响的行数</returns>
+        public int AddRangeAndSave(IEnumerable<T> model)
+        {
+            AddRange(model);
+            return _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 新增实体并保存
+        /// </summary>
+        /// <param name="model">新增的实体</param>
+        /// <returns>受影响的行数</returns>
+        public async Task<int> AddRangeAndSaveAsync(IEnumerable<T> model)
+        {
+            await AddRangeAsync(model);
+            return await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 删除实体
+        /// </summary>
+        /// <param name="model">删除的实体</param>
+        public void Del(T model)
+        {
+            _context.Set<T>().Remove(model);
+        }
+
+
+        /// <summary>
+        /// 删除实体
+        /// </summary>
+        /// <param name="model">删除的实体</param>
+        public void DelRange(IEnumerable<T> model)
+        {
+            _context.Set<T>().RemoveRange(model);
+        }
+        
+        /// <summary>
+        /// 删除实体并保存
+        /// </summary>
+        /// <param name="model">删除的实体</param>
+        /// <returns>受影响的行数</returns>
+        public int DelAndSave(T model)
+        {
+            Del(model);
+            return _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 删除实体并保存
+        /// </summary>
+        /// <param name="model">删除的实体</param>
+        /// <returns>受影响的行数</returns>
+        public async Task<int> DelAndSaveAsync(T model)
+        {
+            Del(model);
+            return await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 删除实体并保存
+        /// </summary>
+        /// <param name="model">删除的实体</param>
+        /// <returns>受影响的行数</returns>
+        public int DelRangeAndSave(IEnumerable<T> model)
+        {
+            DelRange(model);
+            return _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 删除实体并保存
+        /// </summary>
+        /// <param name="model">删除的实体</param>
+        /// <returns>受影响的行数</returns>
+        public async Task<int> DelRangeAndSaveAsync(IEnumerable<T> model)
+        {
+            DelRange(model);
+            return await _context.SaveChangesAsync();
+        }
+
+
+        /// <summary>
+        /// 根据条件删除
+        /// </summary>
+        /// <param name="delWhere">条件</param>
+        public void DelBy(Expression<Func<T, bool>> delWhere)
+        {
+            //查询要删除的数据
+            List<T> listDeleting = _context.Set<T>().Where(delWhere).ToList();
+            //将要删除的数据 用删除方法添加到 EF 容器中
+            DelRange(listDeleting);
+        }
+
+        /// <summary>
+        /// 根据条件删除
+        /// </summary>
+        /// <param name="delWhere">条件</param>
+        public async Task DelByAsync(Expression<Func<T, bool>> delWhere)
+        {
+            //查询要删除的数据
+            List<T> listDeleting = await _context.Set<T>().Where(delWhere).ToListAsync();
+            //将要删除的数据 用删除方法添加到 EF 容器中
+            DelRange(listDeleting);
+        }
+
+        /// <summary>
+        /// 根据条件删除并保存
+        /// </summary>
+        /// <param name="delWhere">条件</param>
+        public int DelAndSaveBy(Expression<Func<T, bool>> delWhere)
+        {
+            DelBy(delWhere);
+            return _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 根据条件删除并保存
+        /// </summary>
+        /// <param name="delWhere">条件</param>
+        public async Task<int> DelAndSaveByAsync(Expression<Func<T, bool>> delWhere)
+        {
+            await DelByAsync(delWhere);
+            return await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 修改实体
+        /// </summary>
+        /// <param name="model">修改的实体</param>
+        public void Modify(T model)
+        {
+            _context.Set<T>().Update(model);
+        }
+
+        /// <summary>
+        /// 修改实体
+        /// </summary>
+        /// <param name="model">修改的实体</param>
+        public void ModifyRange(IEnumerable<T> model)
+        {
+            _context.Set<T>().UpdateRange(model);
+        }
+
+        /// <summary>
+        /// 修改实体并保存
+        /// </summary>
+        /// <param name="model">修改的实体</param>
+        /// <returns>受影响的行数</returns>
+        public int ModifyAndSave(T model)
+        {
+            Modify(model);
+            return _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 修改实体并保存
+        /// </summary>
+        /// <param name="model">修改的实体</param>
+        /// <returns>受影响的行数</returns>
+        public async Task<int> ModifyAndSaveAsync(T model)
+        {
+            Modify(model);
+            return await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 修改实体并保存
+        /// </summary>
+        /// <param name="model">修改的实体</param>
+        /// <returns>受影响的行数</returns>
+        public int ModifyRangeAndSave(IEnumerable<T> model)
+        {
+            ModifyRange(model);
+            return _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// 修改实体并保存
+        /// </summary>
+        /// <param name="model">修改的实体</param>
+        /// <returns>受影响的行数</returns>
+        public async Task<int> ModifyRangeAndSaveAsync(IEnumerable<T> model)
+        {
+            ModifyRange(model);
+            return await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// 根据条件查询单个对象
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public T GetModel(Expression<Func<T, bool>> where)
+        {
+            return _context.Set<T>().AsNoTracking().FirstOrDefault(where);
+        }
+
+        /// <summary>
+        /// 根据条件查询单个对象
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public async Task<T> GetModelAsync(Expression<Func<T, bool>> where)
+        {
+            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(where);
+        }
+
+        /// <summary>
+        /// 根据条件排序查询单个对象
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public async Task<T> GetModelAsync<TKey>(Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderLambda, bool isDes = false)
+        {
+            var query = _context.Set<T>().AsNoTracking().Where(whereLambda);
+            query = isDes ? query.OrderByDescending(orderLambda) : query.OrderBy(orderLambda);
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+        /// <summary>
+        /// 根据条件查询集合  IQueryable
+        /// </summary>
+        /// <param name="whereLambda"></param>
+        /// <returns></returns>
+        public IQueryable<T> GetIQueryable(Expression<Func<T, bool>> whereLambda)
+        {
+            return whereLambda != null ? _context.Set<T>().AsNoTracking().Where(whereLambda) : _context.Set<T>().AsNoTracking();
+        }
+
+        /// <summary>
+        /// 根据条件查询个数
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public int GetCount(Expression<Func<T, bool>> where)
+        {
+            return _context.Set<T>().AsNoTracking().Count(where);
+        }
+
+        /// <summary>
+        /// 根据条件查询个数
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public async Task<int> GetCountAsync(Expression<Func<T, bool>> where)
+        {
+            return await _context.Set<T>().AsNoTracking().CountAsync(where);
         }
 
         public IQueryable<T> ExecSql(string sql)
         {
-            return DbContext.Set<T>().FromSqlRaw(sql).AsNoTracking().AsQueryable();
+            return _context.Set<T>().FromSqlRaw(sql).AsNoTracking().AsQueryable();
         }
 
-        public int CountAll()
-        {
-            return DbContext.Set<T>().AsNoTracking().Count();
-        }
+        /// <summary>
+        /// 保存数据库
+        /// </summary>
+        /// <returns></returns>
+        public int Save() => _context.SaveChanges();
 
+        /// <summary>
+        /// 保存数据库
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> SaveAsync() => await _context.SaveChangesAsync();
 
         public IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda)
         {
-            return whereLambda != null ? DbContext.Set<T>().AsNoTracking().Where(whereLambda) : DbContext.Set<T>().AsNoTracking();
+            return whereLambda != null ? _context.Set<T>().AsNoTracking().Where(whereLambda) : _context.Set<T>().AsNoTracking();
         }
 
         public IQueryable<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderBy)
         {
-            return DbContext.Set<T>().Where(whereLambda.Compile()).AsQueryable().OrderBy(orderBy).Skip((pageIndex - 1) * pageSize).Take(pageSize);
-        }
-
-        public bool SaveChanges()
-        {
-            return DbContext.SaveChangesAsync().Result > 0;
+            return _context.Set<T>().Where(whereLambda.Compile()).AsQueryable().OrderBy(orderBy).Skip((pageIndex - 1) * pageSize).Take(pageSize);
         }
     }
 }

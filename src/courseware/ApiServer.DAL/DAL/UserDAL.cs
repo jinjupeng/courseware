@@ -27,16 +27,7 @@ namespace ApiServer.DAL.DAL
 
         public UserDto GetUserPermission(int userId)
         {
-            var roles = _context.sys_users_roles;
-            var result = from u in _context.sys_users_roles
-                         join r in _context.sys_role_permission
-                         on u.role_id equals r.role_id into x
-                         where u.user_id = userId
-                         select new UserDto
-                         {
-
-                         });
-            return result;
+            throw new NotImplementedException();
         }
     }
 }

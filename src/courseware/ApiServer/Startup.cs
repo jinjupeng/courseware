@@ -3,7 +3,9 @@ using ApiServer.Common;
 using ApiServer.Exception;
 using ApiServer.JWT;
 using ApiServer.Mapping;
+using ApiServer.Model.Entity;
 using ApiServer.Model.Model.MsgModel;
+using ApiServer.Model.Model.OSS;
 using AspNetCoreRateLimit;
 using Autofac;
 using Item.ApiServer.BLL.BLLModule;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -92,13 +95,26 @@ namespace ApiServer
 
             #endregion
 
+            // 数据库上下文注入
+            services.AddDbContext<ContextMySql>(option => option.UseMySql(ConfigTool.Configuration["Setting:Conn"]));
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            #region OSS类注入
+
+            services.Configure<OssInfo>(Configuration.GetSection("oss"));
+            //var ossInfo = new OssInfo();
+            //Configuration.Bind("oss", ossInfo);
+
+            #endregion
+
             #region JwtSetting类注入
+
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             JwtSettings setting = new JwtSettings();
             Configuration.Bind("JwtSettings", setting);
             JwtHelper.Settings = setting;
+
             #endregion
 
             #region 基于策略模式的授权
@@ -251,6 +267,7 @@ namespace ApiServer
 
             #region IP限流
             // https://marcus116.blogspot.com/2019/06/netcore-aspnet-core-webapi-aspnetcoreratelimit-throttle.html
+            // https://www.cnblogs.com/cwsheng/p/14458745.html
 
             // 将速限计数器资料储存在 Memory 中
             services.AddMemoryCache();

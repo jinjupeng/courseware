@@ -201,6 +201,12 @@
             </summary>
             <param name="logger"></param>
         </member>
+        <member name="M:ApiServer.Controllers.UploadController.#ctor(ApiServer.BLL.IBLL.IOssService)">
+            <summary>
+            
+            </summary>
+            <param name="ossService"></param>
+        </member>
         <member name="T:ApiServer.Exception.GlobalExceptionFilter">
             <summary>
             自定义全局异常过滤器：当程序发生异常时，处理系统出现的未捕获的异常

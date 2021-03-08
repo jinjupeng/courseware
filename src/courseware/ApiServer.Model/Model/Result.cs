@@ -29,14 +29,14 @@ namespace ApiServer.Model.Model
 
         public Result(ResultCode resultCode)
         {
-            this.code = int.Parse(resultCode.ToString());
-            this.message = resultCodeList.Single(a => a.EnumValue == this.code).EnumName;
+            this.code = resultCodeList.Single(a => a.EnumName == resultCode.ToString()).EnumValue;
+            this.message = resultCodeList.Single(a => a.EnumName == resultCode.ToString()).Description;
         }
 
         public Result(ResultCode resultCode, object data)
         {
-            this.code = int.Parse(resultCode.ToString());
-            this.message = resultCodeList.Single(a => a.EnumValue == this.code).EnumName;
+            this.code = resultCodeList.Single(a => a.EnumName == resultCode.ToString()).EnumValue;
+            this.message = resultCodeList.Single(a => a.EnumName == resultCode.ToString()).Description;
             this.data = data;
         }
 

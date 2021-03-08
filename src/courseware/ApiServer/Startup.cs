@@ -103,8 +103,8 @@ namespace ApiServer
             #region OSS类注入
 
             services.Configure<OssInfo>(Configuration.GetSection("oss"));
-            //var ossInfo = new OssInfo();
-            //Configuration.Bind("oss", ossInfo);
+            var ossInfo = new OssInfo();
+            Configuration.Bind("oss", ossInfo);
 
             #endregion
 

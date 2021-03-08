@@ -2,7 +2,7 @@
 
 namespace ApiServer.BLL.IBLL
 {
-    public interface IUploadService
+    public interface IOssService
     {
         string Upload(IFormCollection multipartFile);
 

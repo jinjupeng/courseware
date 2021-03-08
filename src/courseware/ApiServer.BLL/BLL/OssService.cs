@@ -8,16 +8,14 @@ using System.Linq;
 
 namespace ApiServer.BLL.BLL
 {
-    public class OssService : IUploadService
+    public class OssService : IOssService
     {
-        private readonly OssInfo _ossInfo;
-        private readonly IOss _oss;
+        //private readonly OssInfo _ossInfo;
 
-        public OssService(OssInfo ossInfo, IOss oss)
-        {
-            _ossInfo = ossInfo;
-            _oss = oss;
-        }
+        //public OssService(OssInfo ossInfo)
+        //{
+        //    _ossInfo = ossInfo;
+        //}
 
         public int Delete(string url)
         {
@@ -38,11 +36,12 @@ namespace ApiServer.BLL.BLL
 
         private string BasicUpload(string objectName, Stream fileStream)
         {
-            var client = new OssClient(_ossInfo.EndPoint, _ossInfo.AccessKeyId, _ossInfo.AccessKeySecret); ;
-            // 上传我呢见
-            var putObjectRequest = new PutObjectRequest(_ossInfo.BucketName, objectName, fileStream);
-            client.PutObject(putObjectRequest);
-            return "/resource/" + objectName;
+            //var client = new OssClient(_ossInfo.Endpoint, _ossInfo.AccessKeyId, _ossInfo.AccessKeySecret); ;
+            //// 上传文件
+            //var putObjectRequest = new PutObjectRequest(_ossInfo.BucketName, objectName, fileStream);
+            //client.PutObject(putObjectRequest);
+            //return "/resource/" + objectName;
+            return "";
         }
     }
 }

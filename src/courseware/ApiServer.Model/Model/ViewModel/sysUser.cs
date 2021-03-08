@@ -1,6 +1,6 @@
 ﻿namespace ApiServer.Model.Model.MsgModel
 {
-    public partial class user
+    public partial class sysUser
     {
         public int id { get; set; }
         public string nickname { get; set; }

@@ -1,4 +1,7 @@
-﻿namespace ApiServer.Model.Entity
+﻿using System;
+using System.Collections.Generic;
+
+namespace ApiServer.Model.Entity
 {
     public partial class sys_role_permission
     {

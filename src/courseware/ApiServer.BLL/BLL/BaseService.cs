@@ -20,44 +20,40 @@ namespace ApiServer.BLL.BLL
         public bool AddRange(IEnumerable<T> t)
         {
             _baseDal.AddRange(t);
-            return _baseDal.SaveChanges();
+            return _baseDal.Save() > 0;
         }
 
         public bool AddRange(params T[] t)
         {
             _baseDal.AddRange(t);
-            return _baseDal.SaveChanges();
+            return _baseDal.Save() > 0;
         }
 
 
-        public bool DeleteRange(IEnumerable<T> t)
+        public void DeleteRange(IEnumerable<T> t)
         {
-            _baseDal.DeleteRange(t);
-            return _baseDal.SaveChanges();
+            _baseDal.DelRange(t);
         }
 
-        public bool DeleteRange(params T[] t)
+        public void DeleteRange(params T[] t)
         {
-            _baseDal.DeleteRange(t);
-            return _baseDal.SaveChanges();
+            _baseDal.DelRange(t);
         }
 
-        public bool UpdateRange(IEnumerable<T> t)
+        public void ModifyRange(IEnumerable<T> t)
         {
-            _baseDal.UpdateRange(t);
-            return _baseDal.SaveChanges();
+            _baseDal.ModifyRange(t);
         }
 
-        public bool UpdateRange(params T[] t)
+        public void ModifyRange(params T[] t)
         {
-            _baseDal.UpdateRange(t);
-            return _baseDal.SaveChanges();
+            _baseDal.ModifyRange(t);
         }
 
 
-        public int CountAll()
+        public int CountAll(Expression<Func<T, bool>> where)
         {
-            return _baseDal.CountAll();
+            return _baseDal.GetCount(where);
         }
 
         public IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda)

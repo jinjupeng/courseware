@@ -131,6 +131,65 @@
             <param name="key"></param>
             <returns></returns>
         </member>
+        <member name="T:ApiServer.Controllers.CwCoursewareController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.AddCourseWare(ApiServer.Model.Entity.cw_courseware)">
+            <summary>
+            新增
+            </summary>
+            <param name="courseware"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.UpdateCourseWare(ApiServer.Model.Entity.cw_courseware)">
+            <summary>
+            更新
+            </summary>
+            <param name="courseware"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.DeleteCourseWare(System.Int32)">
+            <summary>
+            删除
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.getCourseWare(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.listCourseWare(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.listCourseWareByAdmin(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="start"></param>
+            <returns></returns>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.getCarousel">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.getCarouselForAdmin">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:ApiServer.Controllers.ExceptionController">
             <summary>
             异常

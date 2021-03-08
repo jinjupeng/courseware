@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ApiServer.Model.Entity
 {
@@ -16,6 +17,6 @@ namespace ApiServer.Model.Entity
         public string wx_order { get; set; }
 
         public virtual cw_courseware cw_ { get; set; }
-        public virtual user user_ { get; set; }
+        public virtual sys_user user_ { get; set; }
     }
 }

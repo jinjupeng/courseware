@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ApiServer.Model.Entity
 {
@@ -19,8 +21,8 @@ namespace ApiServer.Model.Entity
         public virtual DbSet<cw_user_courseware> cw_user_courseware { get; set; }
         public virtual DbSet<sys_role> sys_role { get; set; }
         public virtual DbSet<sys_role_permission> sys_role_permission { get; set; }
+        public virtual DbSet<sys_user> sys_user { get; set; }
         public virtual DbSet<sys_users_roles> sys_users_roles { get; set; }
-        public virtual DbSet<user> user { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -241,23 +243,7 @@ namespace ApiServer.Model.Entity
                     .HasCollation("utf8_general_ci");
             });
 
-            modelBuilder.Entity<sys_users_roles>(entity =>
-            {
-                entity.HasKey(e => new { e.user_id, e.role_id })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                entity.HasComment("用户角色关联");
-
-                entity.HasIndex(e => e.role_id)
-                    .HasName("FKq4eq273l04bpu4efj0jd0jb98");
-
-                entity.Property(e => e.user_id).HasComment("用户ID");
-
-                entity.Property(e => e.role_id).HasComment("角色ID");
-            });
-
-            modelBuilder.Entity<user>(entity =>
+            modelBuilder.Entity<sys_user>(entity =>
             {
                 entity.HasIndex(e => e.username)
                     .HasName("user_username_uindex")
@@ -312,6 +298,22 @@ namespace ApiServer.Model.Entity
                     .HasColumnType("varchar(255)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
+            });
+
+            modelBuilder.Entity<sys_users_roles>(entity =>
+            {
+                entity.HasKey(e => new { e.user_id, e.role_id })
+                    .HasName("PRIMARY")
+                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+                entity.HasComment("用户角色关联");
+
+                entity.HasIndex(e => e.role_id)
+                    .HasName("FKq4eq273l04bpu4efj0jd0jb98");
+
+                entity.Property(e => e.user_id).HasComment("用户ID");
+
+                entity.Property(e => e.role_id).HasComment("角色ID");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -2,6 +2,7 @@
 using ApiServer.BLL.IBLL;
 using ApiServer.Model.Model.OSS;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
@@ -10,12 +11,12 @@ namespace ApiServer.BLL.BLL
 {
     public class OssService : IOssService
     {
-        //private readonly OssInfo _ossInfo;
+        private readonly OssInfo _ossInfo;
 
-        //public OssService(OssInfo ossInfo)
-        //{
-        //    _ossInfo = ossInfo;
-        //}
+        public OssService(IOptions<OssInfo> ossInfo)
+        {
+            _ossInfo = ossInfo.Value;
+        }
 
         public int Delete(string url)
         {
@@ -36,12 +37,11 @@ namespace ApiServer.BLL.BLL
 
         private string BasicUpload(string objectName, Stream fileStream)
         {
-            //var client = new OssClient(_ossInfo.Endpoint, _ossInfo.AccessKeyId, _ossInfo.AccessKeySecret); ;
-            //// 上传文件
-            //var putObjectRequest = new PutObjectRequest(_ossInfo.BucketName, objectName, fileStream);
-            //client.PutObject(putObjectRequest);
-            //return "/resource/" + objectName;
-            return "";
+            var client = new OssClient(_ossInfo.Endpoint, _ossInfo.AccessKeyId, _ossInfo.AccessKeySecret); ;
+            // 上传文件
+            var putObjectRequest = new PutObjectRequest(_ossInfo.BucketName, objectName, fileStream);
+            client.PutObject(putObjectRequest);
+            return "/resource/" + objectName;
         }
     }
 }

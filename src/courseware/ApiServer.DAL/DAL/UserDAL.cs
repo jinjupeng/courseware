@@ -10,17 +10,17 @@ namespace ApiServer.DAL.DAL
 {
     public class UserDAL : IUserDAL
     {
-        public readonly BaseDal<user> _baseDal;
+        public readonly BaseDal<sys_user> _baseDal;
         /// <summary>
         /// EF上下文对象
         /// </summary>
         private readonly ContextMySql _context;
-        public UserDAL(ContextMySql context, BaseDal<user> baseDal)
+        public UserDAL(ContextMySql context, BaseDal<sys_user> baseDal)
         {
             this._context = context;
         }
 
-        public user GetUserInfo(string uuid)
+        public sys_user GetUserInfo(string uuid)
         {
             return _baseDal.GetModels(a => a.uuid == uuid).SingleOrDefault();
         }

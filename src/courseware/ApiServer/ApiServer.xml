@@ -201,6 +201,12 @@
             </summary>
             <param name="logger"></param>
         </member>
+        <member name="M:ApiServer.Controllers.SysUserController.#ctor(ApiServer.BLL.IBLL.ISysUserService)">
+            <summary>
+            
+            </summary>
+            <param name="sysUserService"></param>
+        </member>
         <member name="M:ApiServer.Controllers.UploadController.#ctor(ApiServer.BLL.IBLL.IOssService)">
             <summary>
             

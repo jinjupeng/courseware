@@ -4,7 +4,7 @@ using ApiServer.Model.Model.Dto;
 
 namespace ApiServer.BLL.IBLL
 {
-    public interface IUserService
+    public interface ISysUserService
     {
 
         UserDto Login(UserDto user);
@@ -19,6 +19,6 @@ namespace ApiServer.BLL.IBLL
 
         Result DeleteUser(string uuid);
 
-        UserDto UpdateInfo(user user);
+        UserDto UpdateInfo(sys_user user);
     }
 }

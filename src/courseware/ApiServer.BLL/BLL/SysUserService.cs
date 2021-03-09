@@ -1,12 +1,21 @@
 ﻿using ApiServer.BLL.IBLL;
+using ApiServer.Common;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model;
 using ApiServer.Model.Model.Dto;
+using System.Linq;
 
 namespace ApiServer.BLL.BLL
 {
-    public class UserService : IUserService
+    public class SysUserService : ISysUserService
     {
+        private readonly IBaseService<sys_user> _baseService;
+
+        public SysUserService(IBaseService<sys_user> baseService)
+        {
+            _baseService = baseService;
+        }
+
         public Result AuthLogin(WXAuth wxAuth)
         {
             throw new System.NotImplementedException();
@@ -34,7 +43,10 @@ namespace ApiServer.BLL.BLL
 
         public UserDto Login(UserDto user)
         {
-            throw new System.NotImplementedException();
+            var userDto = new UserDto();
+            var userModel = _baseService.GetModels(a => a.username == "起凡").FirstOrDefault();
+            userDto = DeepCopyUtils.DicExpressionMapper<sys_user, UserDto>(userModel);
+            return userDto;
         }
 
         public Result SignUp(UserDto user)
@@ -42,7 +54,7 @@ namespace ApiServer.BLL.BLL
             throw new System.NotImplementedException();
         }
 
-        public UserDto UpdateInfo(user user)
+        public UserDto UpdateInfo(sys_user user)
         {
             throw new System.NotImplementedException();
         }

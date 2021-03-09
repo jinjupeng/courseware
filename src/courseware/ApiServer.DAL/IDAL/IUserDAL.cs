@@ -6,6 +6,6 @@ namespace ApiServer.DAL.IDAL
     public interface IUserDAL
     {
         UserDto GetUserPermission(int userId);
-        user GetUserInfo(string uuid);
+        sys_user GetUserInfo(string uuid);
     }
 }

@@ -7,9 +7,9 @@ export const getImgPath = {
             }
             if (resize) {
                 //这个地址换成你自己的oss地址
-                return 'https://my-community.oss-cn-qingdao.aliyuncs.com' + url.replace("/resource","") + '?x-oss-process=image/resize,w_200';
+                return 'https://dotnetcore.oss-cn-shanghai.aliyuncs.com' + url.replace("/resource","") + '?x-oss-process=image/resize,w_200';
             } else {
-                return 'https://my-community.oss-cn-qingdao.aliyuncs.com' + url.replace("/resource","")
+                return 'https://dotnetcore.oss-cn-shanghai.aliyuncs.com' + url.replace("/resource","")
             }
         }
     }

@@ -27,6 +27,7 @@ namespace ApiServer.BLL.BLL
         {
             var file = multipartFile.Files.FirstOrDefault();
             var objectName = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+            objectName = "resource/" + objectName;
             return BasicUpload(objectName, file.OpenReadStream());
         }
 
@@ -39,9 +40,8 @@ namespace ApiServer.BLL.BLL
         {
             var client = new OssClient(_ossInfo.Endpoint, _ossInfo.AccessKeyId, _ossInfo.AccessKeySecret); ;
             // 上传文件
-            var putObjectRequest = new PutObjectRequest(_ossInfo.BucketName, objectName, fileStream);
-            client.PutObject(putObjectRequest);
-            return "/resource/" + objectName;
+            client.PutObject(_ossInfo.BucketName, objectName, fileStream);
+            return "/" + objectName;
         }
     }
 }

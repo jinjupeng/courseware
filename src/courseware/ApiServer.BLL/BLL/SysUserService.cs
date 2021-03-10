@@ -45,7 +45,7 @@ namespace ApiServer.BLL.BLL
         {
             var userDto = new UserDto();
             var userModel = _baseService.GetModels(a => a.username == "起凡").FirstOrDefault();
-            userDto = DeepCopyUtils.DicExpressionMapper<sys_user, UserDto>(userModel);
+            userDto = userModel.BuildAdapter().AdaptToType<sysUser>();
             return userDto;
         }
 

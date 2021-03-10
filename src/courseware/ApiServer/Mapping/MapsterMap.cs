@@ -20,7 +20,7 @@ namespace ApiServer.Mapping
 
             #region 返回前端实体类映射
 
-            //config.NewConfig<Sys_Org, SysOrgNode>().NameMatchingStrategy(NameMatchingStrategy.ToCamelCase);
+            config.NewConfig<sys_user, sysUser>().NameMatchingStrategy(NameMatchingStrategy.ToCamelCase);
 
             #endregion
 

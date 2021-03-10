@@ -20,7 +20,9 @@ namespace ApiServer.BLL.BLL
 
         public int Delete(string url)
         {
-            throw new NotImplementedException();
+            var client = new OssClient(_ossInfo.Endpoint, _ossInfo.AccessKeyId, _ossInfo.AccessKeySecret);
+            var result = client.DeleteObject(_ossInfo.BucketName, url).DeleteMarker;
+            return result ? 1 : 0;
         }
 
         public string Upload(IFormCollection multipartFile)
@@ -33,7 +35,10 @@ namespace ApiServer.BLL.BLL
 
         public string UploadByPath(IFormCollection multipartFile, string path)
         {
-            throw new NotImplementedException();
+            var file = multipartFile.Files.FirstOrDefault();
+            var objectName = path + "/" + DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+            objectName = "resource/" + objectName;
+            return BasicUpload(objectName, file.OpenReadStream());
         }
 
         private string BasicUpload(string objectName, Stream fileStream)

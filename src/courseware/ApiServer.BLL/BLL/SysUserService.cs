@@ -3,6 +3,8 @@ using ApiServer.Common;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model;
 using ApiServer.Model.Model.Dto;
+using ApiServer.Model.Model.MsgModel;
+using Mapster;
 using System.Linq;
 
 namespace ApiServer.BLL.BLL
@@ -44,8 +46,8 @@ namespace ApiServer.BLL.BLL
         public UserDto Login(UserDto user)
         {
             var userDto = new UserDto();
-            var userModel = _baseService.GetModels(a => a.username == "起凡").FirstOrDefault();
-            userDto = userModel.BuildAdapter().AdaptToType<sysUser>();
+            var userModel = _baseService.GetModels(a => a.username == user.username).FirstOrDefault();
+            userDto = userModel.BuildAdapter().AdaptToType<UserDto>();
             return userDto;
         }
 

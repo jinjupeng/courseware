@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from './src/router'
 import {Message} from 'element-ui'
-const base = "/cw-api"
+const base = "/api"
 
 const http = axios.create({
 

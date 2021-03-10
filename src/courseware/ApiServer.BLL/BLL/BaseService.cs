@@ -29,6 +29,11 @@ namespace ApiServer.BLL.BLL
             return _baseDal.Save() > 0;
         }
 
+        public int DelAndSaveBy(Expression<Func<T, bool>> exp)
+        {
+           return  _baseDal.DelAndSaveBy(exp);
+        }
+
 
         public void DeleteRange(IEnumerable<T> t)
         {

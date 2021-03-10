@@ -12,6 +12,7 @@ namespace ApiServer.BLL.IBLL
         bool AddRange(params T[] t);
         void DeleteRange(IEnumerable<T> t);
         void DeleteRange(params T[] t);
+        int DelAndSaveBy(Expression<Func<T, bool>> exp);
         void ModifyRange(IEnumerable<T> t);
         void ModifyRange(params T[] t);
         int CountAll(Expression<Func<T, bool>> where);

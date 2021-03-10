@@ -40,6 +40,7 @@ namespace ApiServer.JWT
                     #region token添加自定义参数
                     new Claim(ClaimTypes.Name, tokenModel.Name),
                     new Claim(ClaimTypes.Role, tokenModel.Role),
+                    new Claim("userId", tokenModel.UserId),
                     // new Claim(ClaimTypes.Sid,tokenModel.ToString()),
                     #endregion
                     new Claim(JwtRegisteredClaimNames.Jti, tokenModel.Sid.ToString()),

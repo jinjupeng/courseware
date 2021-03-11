@@ -29,14 +29,14 @@ namespace ApiServer.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/list")]
+        [Route("list")]
         public async Task<IActionResult> ListKey([FromQuery] int pageIndex = 0, int pageSize = 0)
         {
             return Ok(await Task.FromResult(""));
         }
 
         [HttpGet]
-        [Route("/add")]
+        [Route("add")]
         public async Task<IActionResult> Add([FromQuery] int id)
         {
             var cwExchangeKey = new cw_exchange_key { 
@@ -50,7 +50,7 @@ namespace ApiServer.Controllers
         }
 
         [HttpGet]
-        [Route("/use")]
+        [Route("use")]
         public async Task<IActionResult> Use([FromQuery] string key)
         {
             var result = _cwExchangeKeyService.Use(key);
@@ -59,10 +59,10 @@ namespace ApiServer.Controllers
 
 
         [HttpGet]
-        [Route("/delete")]
+        [Route("delete")]
         public async Task<IActionResult> delete([FromQuery] int id)
         {
-            var result = _baseService.DelAndSaveBy(a => a.id == id) > 0;
+            var result = _baseService.DelBy(a => a.id == id) > 0;
             return Ok(await Task.FromResult(result));
         }
     }

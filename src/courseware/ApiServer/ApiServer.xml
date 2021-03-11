@@ -136,55 +136,64 @@
             
             </summary>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.AddCourseWare(ApiServer.Model.Entity.cw_courseware)">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.#ctor(ApiServer.BLL.IBLL.ICwCoursewareService,ApiServer.BLL.IBLL.IBaseService{ApiServer.Model.Entity.cw_courseware})">
+            <summary>
+            
+            </summary>
+            <param name="cwCoursewareService"></param>
+            <param name="baseService"></param>
+        </member>
+        <member name="M:ApiServer.Controllers.CwCoursewareController.AddCourseware(ApiServer.Model.Entity.cw_courseware)">
             <summary>
             新增
             </summary>
             <param name="courseware"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.UpdateCourseWare(ApiServer.Model.Entity.cw_courseware)">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.UpdateCourseware(ApiServer.Model.Entity.cw_courseware)">
             <summary>
             更新
             </summary>
             <param name="courseware"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.DeleteCourseWare(System.Int32)">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.DeleteCourseware(System.Int32)">
             <summary>
             删除
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.getCourseWare(System.Int32)">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.GetCourseware(System.Int32)">
             <summary>
             
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.listCourseWare(System.Int32)">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.ListCourseware(System.Int32,System.Int32)">
             <summary>
             
             </summary>
-            <param name="start"></param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.listCourseWareByAdmin(System.Int32)">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.ListCoursewareByAdmin(System.Int32,System.Int32)">
             <summary>
             
             </summary>
-            <param name="start"></param>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.getCarousel">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.GetCarousel">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.getCarouselForAdmin">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.GetCarouselForAdmin">
             <summary>
             
             </summary>
@@ -260,154 +269,6 @@
             
             </summary>
             <param name="value"></param>
-        </member>
-        <member name="T:ApiServer.JWT.JwtHelper">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.JwtHelper.Settings">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:ApiServer.JWT.JwtHelper.SecurityKey">
-            <summary>
-            秘钥，可以从配置文件中获取
-            </summary>
-        </member>
-        <member name="M:ApiServer.JWT.JwtHelper.IssueJwt(ApiServer.Model.Model.TokenModelJwt)">
-            <summary>
-            颁发JWT字符串
-            </summary>
-            <param name="tokenModel"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ApiServer.JWT.JwtHelper.SerializeJwt(System.String)">
-            <summary>
-            解析token
-            </summary>
-            <param name="token"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ApiServer.JWT.JwtHelper.RefreshToken(System.String)">
-            <summary>
-            刷新token值
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:ApiServer.JWT.JwtHelper.Validate(System.String)">
-            <summary>
-            验证身份 验证签名的有效性,
-            </summary>
-            <param name="encodeJwt"></param>
-            例如：payLoad["aud"]?.ToString() == "roberAuddience";
-            例如：验证是否过期 等
-            <returns></returns>
-        </member>
-        <member name="M:ApiServer.JWT.JwtHelper.GetPayLoad(System.String)">
-            <summary>
-            获取jwt中的payload
-            </summary>
-            <param name="encodeJwt"></param>
-            <returns></returns>
-        </member>
-        <member name="M:ApiServer.JWT.JwtHelper.ToUnixEpochDate(System.DateTime)">
-            <summary>
-            datetime转时间戳
-            </summary>
-            <param name="date"></param>
-            <returns></returns>
-        </member>
-        <member name="T:ApiServer.JWT.JwtSettings">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.JwtSettings.Issuer">
-            <summary>
-            证书颁发者
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.JwtSettings.Audience">
-            <summary>
-            允许使用的角色
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.JwtSettings.SecretKey">
-            <summary>
-            加密字符串
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.JwtSettings.ExpireMinutes">
-            <summary>
-            过期时间（分钟）
-            </summary>
-        </member>
-        <member name="T:ApiServer.JWT.PermissionRequirement">
-            <summary>
-            必要参数类，类似一个订单信息
-            继承 IAuthorizationRequirement，用于设计自定义权限处理器PermissionHandler
-            因为AuthorizationHandler 中的泛型参数 TRequirement 必须继承 IAuthorizationRequirement
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.PermissionRequirement.Permissions">
-            <summary>
-            用户权限集合，一个订单包含了很多详情，
-            同理，一个网站的认证发行中，也有很多权限详情(这里是Role和URL的关系)
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.PermissionRequirement.DeniedAction">
-            <summary>
-            无权限action
-            </summary>
-        </member>
-        <member name="M:ApiServer.JWT.PermissionRequirement.#ctor">
-            <summary>
-            这里是写死的，也可从数据库获取
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.PermissionRequirement.ClaimType">
-            <summary>
-            认证授权类型
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.PermissionRequirement.LoginPath">
-            <summary>
-            请求路径
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.PermissionRequirement.Issuer">
-            <summary>
-            发行人
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.PermissionRequirement.Audience">
-            <summary>
-            订阅人
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.PermissionRequirement.Expiration">
-            <summary>
-            过期时间
-            </summary>
-        </member>
-        <member name="P:ApiServer.JWT.PermissionRequirement.SigningCredentials">
-            <summary>
-            签名验证
-            </summary>
-        </member>
-        <member name="M:ApiServer.JWT.PermissionRequirement.#ctor(System.String,System.Collections.Generic.List{ApiServer.Model.Model.PermissionItem},System.String,System.String,System.String,Microsoft.IdentityModel.Tokens.SigningCredentials,System.TimeSpan)">
-            <summary>
-            构造
-            </summary>
-            <param name="deniedAction">拒约请求的url</param>
-            <param name="permissions">权限集合</param>
-            <param name="claimType">声明类型</param>
-            <param name="issuer">发行人</param>
-            <param name="audience">订阅人</param>
-            <param name="signingCredentials">签名验证实体</param>
-            <param name="expiration">过期时间</param>
         </member>
         <member name="T:ApiServer.Mapping.MapsterMap">
             <summary>

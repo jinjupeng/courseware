@@ -7,16 +7,12 @@ using System.Text;
 
 namespace ApiServer.DAL.DAL
 {
-    public class SysRoleDAL : ISysRoleDAL
+    public class SysRoleDal : ISysRoleDal
     {
-        public readonly BaseDal<sys_role> _baseDal;
-        /// <summary>
-        /// EF上下文对象
-        /// </summary>
-        private readonly ContextMySql _context;
-        public SysRoleDAL(ContextMySql context, BaseDal<sys_role> baseDal)
+        public readonly IBaseDal<sys_role> _baseDal;
+
+        public SysRoleDal(IBaseDal<sys_role> baseDal)
         {
-            this._context = context;
             _baseDal = baseDal;
         }
 

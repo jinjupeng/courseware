@@ -3,7 +3,7 @@ using ApiServer.Model.Model.Dto;
 
 namespace ApiServer.DAL.IDAL
 {
-    public interface IUserDAL
+    public interface ISysUserDal
     {
         UserDto GetUserPermission(int userId);
         sys_user GetUserInfo(string uuid);

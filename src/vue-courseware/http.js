@@ -1,17 +1,18 @@
 import axios from 'axios'
 import router from './src/router'
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 const base = "/api"
 
 const http = axios.create({
 
-        baseURL: base,
-        headers: {"vary": "Access-Control-Request-Headers", "Content-Type": "application/json"}
-    }
-)
+    baseURL: base,
+    headers: { "vary": "Access-Control-Request-Headers", "Content-Type": "application/json" }
+})
+
 http.baseURL = base
 
 http.interceptors.request.use(function (config) {
+    config.url = base + config.url
     if (localStorage.getItem('token')) {
         config.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
     }

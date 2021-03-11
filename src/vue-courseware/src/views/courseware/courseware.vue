@@ -234,7 +234,7 @@ export default {
   methods: {
     //单击页数加载对应的页面
     loadData() {
-      this.$http.get("/cw-courseware/listForAdmin", {params: {start: this.currentPage}}).then((res) => {
+      this.$http.get("/cwcourseware/listForAdmin", {params: {pageIndex: this.currentPage}}).then((res) => {
         this.tableData = res.data.data
       })
     },
@@ -264,7 +264,7 @@ export default {
     },
     //点击删除按钮
     handleDelete(index, row) {
-      this.$http.get("/cw-courseware/delete", {params: {id: row.id}}).then((res) => {
+      this.$http.get("/cwcourseware/delete", {params: {id: row.id}}).then((res) => {
         if (res.data.data && res.data.data == true) {
           this.$message.success("删除成功")
         } else {
@@ -274,7 +274,7 @@ export default {
     },
     //加载轮播图
     loadCarousel() {
-      this.$http.get("/cw-courseware/getCarouselForAdmin").then((res) => {
+      this.$http.get("/cwcourseware/getCarouselForAdmin").then((res) => {
         this.tableData = {
           totalPage: 1,
           pageNum: 1,
@@ -341,7 +341,7 @@ export default {
         if (this.fileUrlList.length > 0) {
           this.courseware.url = this.fileUrlList.join(";")
         }
-        this.$http.post("/cw-courseware/add", this.courseware).then((res) => {
+        this.$http.post("/cwcourseware/add", this.courseware).then((res) => {
           if (res.data.data && res.data.data === true) {
             this.$message({
               type: "success",
@@ -366,7 +366,7 @@ export default {
         if (this.fileUrlList.length > 0) {
           this.courseware.url = this.fileUrlList.join(";")
         }
-        this.$http.post("/cw-courseware/update", this.courseware).then((res) => {
+        this.$http.post("/cwcourseware/update", this.courseware).then((res) => {
           if (res.data.data && res.data.data == true) {
             this.$message.success("修改成功")
             this.carouselList = []

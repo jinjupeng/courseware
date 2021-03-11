@@ -1,4 +1,4 @@
-﻿namespace ApiServer.JWT
+﻿namespace ApiServer.BLL.JWT
 {
     /// <summary>
     /// 

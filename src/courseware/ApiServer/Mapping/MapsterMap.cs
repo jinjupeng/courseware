@@ -28,7 +28,7 @@ namespace ApiServer.Mapping
 
             #region 接收前端实体类映射
 
-            //config.NewConfig<SysRole, Sys_Role>().NameMatchingStrategy(NameMatchingStrategy.FromCamelCase);
+            config.NewConfig<UserDto, sys_user>().NameMatchingStrategy(NameMatchingStrategy.FromCamelCase);
 
             #endregion
 

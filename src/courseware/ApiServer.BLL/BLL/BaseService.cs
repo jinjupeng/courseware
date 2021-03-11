@@ -66,6 +66,12 @@ namespace ApiServer.BLL.BLL
             return _baseDal.GetList(whereLambda);
         }
 
+        public T GetModel(Expression<Func<T, bool>> whereLambda)
+        {
+            return _baseDal.GetModel(whereLambda);
+        }
+
+
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -74,20 +80,22 @@ namespace ApiServer.BLL.BLL
         /// <param name="pageSize"></param>
         /// <param name="whereLambda"></param>
         /// <returns></returns>
-        public PageModel<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda)
+        public PageModel<T> QueryByPage(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda)
         {
             var pageModel = new PageModel<T>
             {
                 PageIndex = pageIndex,
                 PageSize = pageSize,
+                Size = 0,
                 Total = 0,
                 List = new List<T>()
             };
 
             if (pageIndex == 0 || pageSize == 0)
             {
-                pageModel.List = _baseDal.GetList(whereLambda).ToList();
-                pageModel.Total = pageModel.List.Count;
+                var list = _baseDal.GetList(whereLambda).ToList();
+                pageModel.List = list;
+                pageModel.Total = list.Count;
             }
             else
             {

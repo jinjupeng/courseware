@@ -20,7 +20,7 @@ namespace ApiServer.BLL.BLL
         {
             var userDto = new UserDto();
             var resultList = new List<CwUserCoursewareDto>();
-            var list = _baseDal.GetModels(a => a.user_id == userDto.id);
+            var list = _baseDal.GetList(a => a.user_id == userDto.id);
             resultList = list.BuildAdapter().AdaptToType<List<CwUserCoursewareDto>>();
             return resultList;
         }

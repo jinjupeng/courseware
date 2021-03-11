@@ -90,7 +90,7 @@
         },
         methods: {
             add() {
-                this.$http.get("/cw-exchange-key/add", {params: {id: this.exKey.cwId}}).then(res => {
+                this.$http.get("/cwexchangekey/add", {params: {id: this.exKey.cwId}}).then(res => {
                     if (res.data.data == true) {
                         this.show = false
                         this.$message.success("添加成功")
@@ -100,7 +100,7 @@
                 })
             },
             handleDelete(index, row) {
-                this.$http.get("/cw-exchange-key/delete", {params: {id: row.id}}).then((res) => {
+                this.$http.get("/cwexchangekey/delete", {params: {id: row.id}}).then((res) => {
                     if (res.data.data == true) {
                         this.$message.success("删除成功")
                     } else {
@@ -109,7 +109,7 @@
                 })
             },
             list() {
-                this.$http.get("/cw-exchange-key/list", {params: {start: this.currentPage}}).then(res => {
+                this.$http.get("/cwexchangekey/list", {params: {start: this.currentPage}}).then(res => {
                     this.tableData = res.data.data
                 })
             }

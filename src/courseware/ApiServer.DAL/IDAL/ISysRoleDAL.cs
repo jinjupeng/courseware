@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ApiServer.DAL.IDAL
 {
-    public interface ISysRoleDAL
+    public interface ISysRoleDal
     {
         List<sys_role> ListUserRoles(int userId);
     }

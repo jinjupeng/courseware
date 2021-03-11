@@ -1,7 +1,7 @@
-﻿using ApiServer.Cache.MemoryCache;
+﻿using ApiServer.BLL.JWT;
+using ApiServer.Cache.MemoryCache;
 using ApiServer.Common;
 using ApiServer.Exception;
-using ApiServer.JWT;
 using ApiServer.Mapping;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model.MsgModel;

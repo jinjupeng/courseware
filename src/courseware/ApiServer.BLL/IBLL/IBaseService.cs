@@ -17,9 +17,10 @@ namespace ApiServer.BLL.IBLL
         int ModifyModel(T model);
         int CountAll(Expression<Func<T, bool>> where);
 
+        T GetModel(Expression<Func<T, bool>> whereLambda);
         IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda);
 
-        PageModel<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda);
+        PageModel<T> QueryByPage(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda);
         PageModel<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderBy, bool isDes = false);
     }
 }

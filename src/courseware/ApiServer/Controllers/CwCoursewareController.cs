@@ -1,7 +1,12 @@
 ﻿using ApiServer.BLL.IBLL;
+using ApiServer.BLL.JWT;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace ApiServer.Controllers
@@ -14,7 +19,18 @@ namespace ApiServer.Controllers
     public class CwCoursewareController : ControllerBase
     {
         private readonly ICwCoursewareService _cwCoursewareService;
-        private readonly IBaseService<cw_courseware> baseService;
+        private readonly IBaseService<cw_courseware> _baseService;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cwCoursewareService"></param>
+        /// <param name="baseService"></param>
+        public CwCoursewareController(ICwCoursewareService cwCoursewareService, IBaseService<cw_courseware> baseService)
+        {
+            _cwCoursewareService = cwCoursewareService;
+            _baseService = baseService;
+        }
 
         /// <summary>
         /// 新增
@@ -22,8 +38,9 @@ namespace ApiServer.Controllers
         /// <param name="courseware"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("/add")]
-        public async Task<IActionResult> AddCourseWare([FromBody] cw_courseware courseware)
+        [Route("add")]
+        [Authorize(Roles = "管理员")]
+        public async Task<IActionResult> AddCourseware([FromBody] cw_courseware courseware)
         {
             var result = Result.SUCCESS(_cwCoursewareService.AddCW(courseware));
             return Ok(await Task.FromResult(result));
@@ -35,8 +52,9 @@ namespace ApiServer.Controllers
         /// <param name="courseware"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("/update")]
-        public async Task<IActionResult> UpdateCourseWare([FromBody] cw_courseware courseware)
+        [Route("update")]
+        [Authorize(Roles = "管理员")]
+        public async Task<IActionResult> UpdateCourseware([FromBody] cw_courseware courseware)
         {
             var result = Result.SUCCESS(_cwCoursewareService.UpdateCW(courseware));
             return Ok(await Task.FromResult(result));
@@ -48,8 +66,9 @@ namespace ApiServer.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/delete")]
-        public async Task<IActionResult> DeleteCourseWare([FromQuery] int id)
+        [Route("delete")]
+        [Authorize(Roles = "管理员")]
+        public async Task<IActionResult> DeleteCourseware([FromQuery] int id)
         {
             var result = Result.SUCCESS(_cwCoursewareService.DeleteCW(id));
             return Ok(await Task.FromResult(result));
@@ -61,8 +80,8 @@ namespace ApiServer.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/get")]
-        public async Task<IActionResult> getCourseWare([FromQuery] int id)
+        [Route("get")]
+        public async Task<IActionResult> GetCourseware([FromQuery] int id)
         {
             var result = Result.SUCCESS(_cwCoursewareService.GetCW(id));
             return Ok(await Task.FromResult(result));
@@ -71,26 +90,31 @@ namespace ApiServer.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="start"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/list")]
-        public async Task<IActionResult> listCourseWare([FromQuery] int start)
+        [Route("list")]
+        public async Task<IActionResult> ListCourseware([FromQuery] int pageIndex = 0, int pageSize = 10)
         {
-            var result = Result.SUCCESS(_cwCoursewareService.listCW(start));
+            var pageModel = _baseService.QueryByPage(pageIndex, pageSize, _ => true);
+            pageModel.List.ForEach(a => { a.url = null; });
+            var result = Result.SUCCESS(pageModel);
             return Ok(await Task.FromResult(result));
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="start"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/listForAdmin")]
-        public async Task<IActionResult> listCourseWareByAdmin([FromQuery] int start)
+        [Route("listForAdmin")]
+        public async Task<IActionResult> ListCoursewareByAdmin([FromQuery] int pageIndex = 0, int pageSize = 10)
         {
-            var result = Result.SUCCESS();
+            var pageModel = _baseService.QueryByPage(pageIndex, pageSize, _ => true);
+            var result = Result.SUCCESS(pageModel);
             return Ok(await Task.FromResult(result));
         }
 
@@ -99,8 +123,8 @@ namespace ApiServer.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("/getCarousel")]
-        public async Task<IActionResult> getCarousel()
+        [Route("getCarousel")]
+        public async Task<IActionResult> GetCarousel()
         {
             var result = Result.SUCCESS(_cwCoursewareService.GetCarousel());
             return Ok(await Task.FromResult(result));
@@ -111,10 +135,14 @@ namespace ApiServer.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("/getCarouselForAdmin")]
-        public async Task<IActionResult> getCarouselForAdmin()
+        [Route("getCarouselForAdmin")]
+        public async Task<IActionResult> GetCarouselForAdmin()
         {
-            var result = Result.SUCCESS(_cwCoursewareService.GetCarousel());
+            var cwCoursewares = _cwCoursewareService.GetCarousel();
+            // 如果当前登录用户的角色不是管理员，则将url数据置为null
+            var userId = JwtHelper.LoginUserId(HttpContext);
+
+            var result = Result.SUCCESS(cwCoursewares);
             return Ok(await Task.FromResult(result));
         }
     }

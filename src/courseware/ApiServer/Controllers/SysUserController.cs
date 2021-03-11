@@ -30,6 +30,7 @@ namespace ApiServer.Controllers
         public async Task<IActionResult> Login([FromBody] UserDto user)
         {
             var result = _sysUserService.Login(user);
+            // TODO：生成token
             user.password = "";
             user.token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyIiwiZmlkIjoiMSIsInVuIjoiemhhbmdzYW4iLCJzdXAiOiJGYWxzZSIsIm5iZiI6IjE2MTUxOTkwMTEiLCJleHAiOjE2MTc3MTkwMTAsImlzcyI6Imx0LmFtaXM4LjAiLCJhdWQiOiJsdC5hbWlzOC4wIn0.08EeihVX-j7Fs5n0Nz7qepO7Tk0fdcHxr65PfJtP9ng";
             return Ok(await Task.FromResult(Result.SUCCESS(result)));

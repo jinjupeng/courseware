@@ -121,9 +121,10 @@ namespace ApiServer
             // jwt服务注入
             services.AddAuthorization(options =>
             {
-                // 增加定义策略
-                options.AddPolicy("Permission", policy => policy.Requirements.Add(new PermissionRequirement()));
-
+                //// 自定义策略
+                //options.AddPolicy("Permission", policy => policy.Requirements.Add(new PermissionRequirement()));
+                // 一个角色，一个策略
+                options.AddPolicy("Admin", policy => policy.RequireRole("管理员").Build());
             })
 
             #region JWT认证，core自带官方jwt认证

@@ -41,7 +41,10 @@ namespace ApiServer.DAL.IDAL
         T GetModel(Expression<Func<T, bool>> where);
         Task<T> GetModelAsync(Expression<Func<T, bool>> where);
         Task<T> GetModelAsync<TKey>(Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderLambda, bool isDes = false);
-        IQueryable<T> GetIQueryable(Expression<Func<T, bool>> where);
+
+        IQueryable<T> GetList(Expression<Func<T, bool>> where);
+
+        IQueryable<T> GetList<TKey>(Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderLambda, bool isDes = false);
 
         int GetCount(Expression<Func<T, bool>> where);
         Task<int> GetCountAsync(Expression<Func<T, bool>> where);
@@ -50,9 +53,6 @@ namespace ApiServer.DAL.IDAL
         Task<int> SaveAsync();
 
         IQueryable<T> ExecSql(string sql);
-
-        IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda);
-        IQueryable<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderBy);
 
     }
 }

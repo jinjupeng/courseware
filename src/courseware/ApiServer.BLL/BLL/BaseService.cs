@@ -17,42 +17,42 @@ namespace ApiServer.BLL.BLL
         {
             _baseDal = baseDal;
         }
-        public bool AddRange(IEnumerable<T> t)
+        public int AddRange(IEnumerable<T> t)
         {
             _baseDal.AddRange(t);
-            return _baseDal.Save() > 0;
+            return _baseDal.Save();
         }
 
-        public bool AddRange(params T[] t)
+        public int AddModel(T model)
         {
-            _baseDal.AddRange(t);
-            return _baseDal.Save() > 0;
+            return _baseDal.AddAndSave(model);
         }
 
-        public int DelAndSaveBy(Expression<Func<T, bool>> exp)
-        {
-           return  _baseDal.DelAndSaveBy(exp);
-        }
-
-
-        public void DeleteRange(IEnumerable<T> t)
+        public int DelRange(IEnumerable<T> t)
         {
             _baseDal.DelRange(t);
+            return _baseDal.Save();
         }
 
-        public void DeleteRange(params T[] t)
+        public int DelModel(T model)
         {
-            _baseDal.DelRange(t);
+            return _baseDal.DelAndSave(model);
         }
 
-        public void ModifyRange(IEnumerable<T> t)
+        public int DelBy(Expression<Func<T, bool>> exp)
+        {
+            return _baseDal.DelAndSaveBy(exp);
+        }
+
+        public int ModifyRange(IEnumerable<T> t)
         {
             _baseDal.ModifyRange(t);
+            return _baseDal.Save();
         }
 
-        public void ModifyRange(params T[] t)
+        public int ModifyModel(T model)
         {
-            _baseDal.ModifyRange(t);
+            return _baseDal.ModifyAndSave(model);
         }
 
 
@@ -63,20 +63,90 @@ namespace ApiServer.BLL.BLL
 
         public IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda)
         {
-            return _baseDal.GetModels(whereLambda);
+            return _baseDal.GetList(whereLambda);
         }
 
-        public PageModel<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderBy)
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="whereLambda"></param>
+        /// <returns></returns>
+        public PageModel<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda)
+        {
+            var pageModel = new PageModel<T>
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Total = 0,
+                List = new List<T>()
+            };
+
+            if (pageIndex == 0 || pageSize == 0)
+            {
+                pageModel.List = _baseDal.GetList(whereLambda).ToList();
+                pageModel.Total = pageModel.List.Count;
+            }
+            else
+            {
+                var query = _baseDal.GetList(whereLambda);
+                pageModel.Total = query.Count();
+                pageModel.List = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            }
+
+            return pageModel;
+        }
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="whereLambda"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="isDes"></param>
+        /// <returns></returns>
+        public PageModel<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderBy, bool isDes = false)
         {
             PageModel<T> pageModel = new PageModel<T>
             {
-                pageNum = pageIndex,
-                size = pageSize,
-                records = _baseDal.QueryByPage(pageIndex, pageSize, whereLambda, orderBy).ToList()
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Total = 0,
+                List = new List<T>()
             };
-            pageModel.total = pageModel.records.Count;
-            pageModel.pageSize = pageModel.total % pageSize > 0 ? pageModel.total / pageSize + 1 : pageModel.total / pageSize;
-
+            if (pageIndex == 0 || pageSize == 0)
+            {
+                if (orderBy != null)
+                {
+                    pageModel.List = _baseDal.GetList(whereLambda, orderBy, isDes).ToList();
+                    pageModel.Total = pageModel.List.Count;
+                }
+                else
+                {
+                    pageModel.List = _baseDal.GetList(whereLambda).ToList();
+                    pageModel.Total = pageModel.List.Count;
+                }
+            }
+            else
+            {
+                IQueryable<T> query;
+                if (orderBy != null)
+                {
+                    query = _baseDal.GetList(whereLambda, orderBy, isDes);
+                    pageModel.Total = query.Count();
+                    pageModel.List = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+                }
+                else
+                {
+                    query = _baseDal.GetList(whereLambda);
+                    pageModel.Total = query.Count();
+                    pageModel.List = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+                }
+            }
             return pageModel;
         }
     }

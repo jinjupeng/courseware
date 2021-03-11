@@ -302,16 +302,30 @@ namespace ApiServer.DAL.DAL
             query = isDes ? query.OrderByDescending(orderLambda) : query.OrderBy(orderLambda);
             return await query.FirstOrDefaultAsync();
         }
-
+        /// <summary>
+        /// 根据条件查询集合
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public IQueryable<T> GetList(Expression<Func<T, bool>> where)
+        {
+            var list = _context.Set<T>().AsNoTracking().Where(where);
+            return list;
+        }
 
         /// <summary>
-        /// 根据条件查询集合  IQueryable
+        /// 根据条件查询排序集合
         /// </summary>
-        /// <param name="whereLambda"></param>
-        /// <returns></returns>
-        public IQueryable<T> GetIQueryable(Expression<Func<T, bool>> whereLambda)
+        /// <typeparam name="TKey">排序字段类型</typeparam>
+        /// <param name="whereLambda">查询条件 lambda表达式</param>
+        /// <param name="orderLambda">排序条件 lambda表达式</param>
+        /// // <param name="isDes">是否降序</param>
+        /// <returns>返回的集合</returns>
+        public IQueryable<T> GetList<TKey>(Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderLambda, bool isDes = false)
         {
-            return whereLambda != null ? _context.Set<T>().AsNoTracking().Where(whereLambda) : _context.Set<T>().AsNoTracking();
+            var query = _context.Set<T>().AsNoTracking().Where(whereLambda);
+            var list = isDes ? query.OrderByDescending(orderLambda) : query.OrderBy(orderLambda);
+            return list;
         }
 
         /// <summary>
@@ -323,6 +337,7 @@ namespace ApiServer.DAL.DAL
         {
             return _context.Set<T>().AsNoTracking().Count(where);
         }
+
 
         /// <summary>
         /// 根据条件查询个数
@@ -351,14 +366,5 @@ namespace ApiServer.DAL.DAL
         /// <returns></returns>
         public async Task<int> SaveAsync() => await _context.SaveChangesAsync();
 
-        public IQueryable<T> GetModels(Expression<Func<T, bool>> whereLambda)
-        {
-            return whereLambda != null ? _context.Set<T>().AsNoTracking().Where(whereLambda) : _context.Set<T>().AsNoTracking();
-        }
-
-        public IQueryable<T> QueryByPage<TKey>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda, Expression<Func<T, TKey>> orderBy)
-        {
-            return _context.Set<T>().Where(whereLambda.Compile()).AsQueryable().OrderBy(orderBy).Skip((pageIndex - 1) * pageSize).Take(pageSize);
-        }
     }
 }

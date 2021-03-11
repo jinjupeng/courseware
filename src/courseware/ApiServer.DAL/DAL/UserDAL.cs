@@ -22,7 +22,7 @@ namespace ApiServer.DAL.DAL
 
         public sys_user GetUserInfo(string uuid)
         {
-            return _baseDal.GetModels(a => a.uuid == uuid).SingleOrDefault();
+            return _baseDal.GetList(a => a.uuid == uuid).SingleOrDefault();
         }
 
         public UserDto GetUserPermission(int userId)

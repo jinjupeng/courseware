@@ -1,4 +1,8 @@
-﻿using ApiServer.Model.Model;
+﻿using ApiServer.Common;
+using ApiServer.Model.Model;
+using ApiServer.Model.Model.Dto;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
@@ -26,32 +30,39 @@ namespace ApiServer.JWT
         /// <summary>
         /// 秘钥，可以从配置文件中获取
         /// </summary>
-        public static string SecurityKey = Common.ConfigTool.Configuration["Jwt:SecurityKey"];
+        public static string SecurityKey = ConfigTool.Configuration["Jwt:SecurityKey"];
+
+        /// <summary>
+        /// 过期时间
+        /// </summary>
+        public static string ExpireMinutes = ConfigTool.Configuration["Jwt:ExpireMinutes"];
 
         /// <summary>
         /// 颁发JWT字符串
         /// </summary>
-        /// <param name="tokenModel"></param>
+        /// <param name="payLoad"></param>
         /// <returns></returns>
-        public static string IssueJwt(TokenModelJwt tokenModel)
+        public static string IssueJwt(Dictionary<string, object> payLoad)
         {
             // 这里就是声明我们的claim
             var claims = new Claim[] {
-                    #region token添加自定义参数
-                    new Claim(ClaimTypes.Name, tokenModel.Name),
-                    new Claim(ClaimTypes.Role, tokenModel.Role),
-                    new Claim("userId", tokenModel.UserId),
-                    // new Claim(ClaimTypes.Sid,tokenModel.ToString()),
-                    #endregion
-                    new Claim(JwtRegisteredClaimNames.Jti, tokenModel.Sid.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, $"{new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds()}"),
-                    new Claim(JwtRegisteredClaimNames.Nbf,$"{new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds()}") ,
-                    // 这个就是过期时间，目前是过期60秒，可自定义，注意JWT有自己的缓冲过期时间
-                    new Claim (JwtRegisteredClaimNames.Exp,$"{new DateTimeOffset(DateTime.Now.AddSeconds(600)).ToUnixTimeSeconds()}"),
-                    new Claim(JwtRegisteredClaimNames.Iss,_settings.Issuer),
-                    new Claim(JwtRegisteredClaimNames.Aud,_settings.Audience),
-                    // new Claim(JwtRegisteredClaimNames.Sub, tokenModel.Name)
-                };
+                // token添加自定义参数
+                new Claim("uid", payLoad["uid"].ToString()),
+                new Claim("uname", payLoad["uname"].ToString()),
+                // 这个Role是官方UseAuthentication要要验证的Role，也就是Controller接口上的[Authorize(Roles = "管理员")]
+                new Claim(ClaimTypes.Role, payLoad["role"].ToString()),
+
+                //Claim的默认配置
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, $"{new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds()}"),
+                new Claim(JwtRegisteredClaimNames.Nbf, $"{new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds()}") ,
+                // 这个就是过期时间，目前是过期600秒，可自定义，注意JWT有自己的缓冲过期时间
+                new Claim (JwtRegisteredClaimNames.Exp, $"{new DateTimeOffset(DateTime.Now.AddSeconds(600)).ToUnixTimeSeconds()}"),
+                new Claim(JwtRegisteredClaimNames.Iss, _settings.Issuer),
+                new Claim(JwtRegisteredClaimNames.Aud, _settings.Audience),
+                new Claim(JwtRegisteredClaimNames.Sub, "dotnetore")
+
+            };
 
             // 密钥(SymmetricSecurityKey 对安全性的要求，密钥的长度太短会报出异常)
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecretKey));
@@ -67,32 +78,6 @@ namespace ApiServer.JWT
             return token;
         }
 
-        /// <summary>
-        /// 解析token
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        public static TokenModelJwt SerializeJwt(string token)
-        {
-            var jwtHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(token);
-            object role;
-            try
-            {
-                jwtToken.Payload.TryGetValue(ClaimTypes.Role, out role);
-            }
-            catch (System.Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-            var tm = new TokenModelJwt
-            {
-                Sid = Convert.ToInt64(jwtToken.Id),
-                Role = role != null ? Convert.ToString(role) : "",
-            };
-            return tm;
-        }
 
         /// <summary>
         /// 刷新token值
@@ -136,7 +121,6 @@ namespace ApiServer.JWT
         /// <returns></returns>
         public static bool Validate(string encodeJwt)
         {
-            var success = true;
             //encodeJwt = encodeJwt.ToString().Substring("Bearer ".Length).Trim();
             var jwtArr = encodeJwt.Split('.');
             //var header = JsonConvert.DeserializeObject<Dictionary<string, object>>(Base64UrlEncoder.Decode(jwtArr[0]));
@@ -147,7 +131,7 @@ namespace ApiServer.JWT
             var encodedSignature = Base64UrlEncoder.Encode(hs256.ComputeHash(Encoding.UTF8.GetBytes(string.Concat(jwtArr[0], ".", jwtArr[1]))));
 
             //首先验证签名是否正确（必须的)
-            success = string.Equals(jwtArr[2], encodedSignature);
+            bool success = string.Equals(jwtArr[2], encodedSignature);
             if (!success)
             {
                 return false;
@@ -179,5 +163,44 @@ namespace ApiServer.JWT
         public static long ToUnixEpochDate(DateTime date) =>
             (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
 
+        /// <summary>
+        /// 获取登录人id
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
+        public static int LoginUserId(HttpContext httpContext)
+        {
+            httpContext.Request.Headers.TryGetValue("Authorization", out StringValues authStr);
+            var payLoad = GetPayLoad(authStr);
+            return int.Parse(payLoad["uid"].ToString());
+        }
+
+        /// <summary>
+        /// 获取登录名
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
+        public static string LoginUserName(HttpContext httpContext)
+        {
+            httpContext.Request.Headers.TryGetValue("Authorization", out StringValues authStr);
+            var payLoad = GetPayLoad(authStr);
+            return (payLoad["uname"].ToString());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
+        public static UserDto LoginDto(HttpContext httpContext)
+        {
+            var result = new UserDto();
+            httpContext.Request.Headers.TryGetValue("Authorization", out StringValues authStr);
+            var payLoad = GetPayLoad(authStr);
+            result.id = int.Parse(payLoad["uid"].ToString());
+            result.username = payLoad["uname"].ToString();
+            return result;
+
+        }
     }
 }

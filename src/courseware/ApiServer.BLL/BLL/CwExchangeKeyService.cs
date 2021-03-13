@@ -20,14 +20,15 @@ namespace ApiServer.BLL.BLL
         {
             var result = false;
             var cwExchangeKey = _baseDal.GetModel(a => a.ex_key == key);
-            if(cwExchangeKey != null && !(bool)cwExchangeKey.is_used)
+            if (cwExchangeKey != null && !(bool)cwExchangeKey.is_used)
             {
                 // todo:根据token获取UserDto
                 var userDto = new UserDto();
                 var cwUserCourseware = _userCourseDal.GetModel(a => a.cw_id == cwExchangeKey.cw_id && a.user_id == userDto.id);
-                if(cwUserCourseware == null)
+                if (cwUserCourseware == null)
                 {
-                    var userCourseware = new cw_user_courseware {
+                    var userCourseware = new cw_user_courseware
+                    {
                         cw_id = cwExchangeKey.cw_id,
                         user_id = userDto.id
                     };

@@ -56,7 +56,7 @@ namespace ApiServer.DAL.DAL
         {
             await _context.Set<T>().AddRangeAsync(model);
         }
-        
+
         /// <summary>
         /// 新增实体并保存
         /// </summary>
@@ -119,7 +119,7 @@ namespace ApiServer.DAL.DAL
         {
             _context.Set<T>().RemoveRange(model);
         }
-        
+
         /// <summary>
         /// 删除实体并保存
         /// </summary>

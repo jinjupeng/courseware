@@ -1,5 +1,4 @@
 ﻿using ApiServer.Common;
-using ApiServer.Model.Model;
 using ApiServer.Model.Model.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;

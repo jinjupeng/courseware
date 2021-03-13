@@ -17,7 +17,7 @@ export const upload = (filePath) => {
 	let token = "Bearer ";
 	token += uni.getStorageSync('token');
 	const then= uni.uploadFile({
-		url: cwUrl + "/fh-upload/upload",
+		url: cwUrl + "/upload/upload",
 		filePath: filePath,
 		name:'file',
 		header: {

@@ -43,7 +43,7 @@ namespace ApiServer.BLL.BLL
             var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(wxDecrypt);
             var phoneNumber = dict["phoneNumber"].ToString();
             var user = _baseDal.GetModel(a => a.phone_number == phoneNumber);
-            if(user != null) // 登录
+            if (user != null) // 登录
             {
                 user.username = null;
                 var userDto = new UserDto();
@@ -83,13 +83,13 @@ namespace ApiServer.BLL.BLL
             var userDto = _commonService.GetUserDto();
             var user = _baseService.GetModel(a => a.id == userDto.id);
             // 如果是自己获取自己的信息且刷新token
-            if(user.uuid == uuid && refresh)
+            if (user.uuid == uuid && refresh)
             {
                 return Login(userDto);
             }
 
             // 如果是自己获取自己的信息
-            else if(user.uuid == uuid)
+            else if (user.uuid == uuid)
             {
                 userDto.password = "";
                 return userDto;
@@ -117,7 +117,7 @@ namespace ApiServer.BLL.BLL
         {
             var userDto = new UserDto();
             var userModel = _baseService.GetModel(a => a.username == user.username && a.password == user.password);
-            if(userDto == null)
+            if (userDto == null)
             {
                 throw new CustomException(500, "用户名或密码错误！");
             }
@@ -148,10 +148,10 @@ namespace ApiServer.BLL.BLL
             var stringRandom = CommonUtils.GetStringRandom(10);
             user.username = stringRandom;
             user.nickname = stringRandom;
-            if(user.phoneNumber != null)
+            if (user.phoneNumber != null)
             {
                 var queryUser = _baseDal.GetModel(a => a.phone_number == user.phoneNumber);
-                if(queryUser == null)
+                if (queryUser == null)
                 {
                     var sysUser = new sys_user();
                     sysUser = user.BuildAdapter().AdaptToType<sys_user>();

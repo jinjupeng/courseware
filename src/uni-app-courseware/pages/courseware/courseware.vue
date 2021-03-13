@@ -52,7 +52,7 @@
 		},
 		methods: {
 			exchange() {
-				this.$http("/cw-exchange-key/use", 'get', {
+				this.$http("/cwexchangekey/use", 'get', {
 					key: this.exchangeCode
 				}).then((res) => {
 					if (res.data.data == true) {
@@ -75,7 +75,7 @@
 				})
 			},
 			loadCourseware() {
-				this.$http("/cw-user-courseware/myCourseware", "get").then(res => {
+				this.$http("/cwusercourseware/myCourseware", "get").then(res => {
 					this.coursewares = res.data.data
 					console.log(this.coursewares)
 				})

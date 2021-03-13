@@ -218,11 +218,18 @@
             </summary>
             <param name="logger"></param>
         </member>
-        <member name="M:ApiServer.Controllers.SysUserController.#ctor(ApiServer.BLL.IBLL.ISysUserService)">
+        <member name="M:ApiServer.Controllers.SysUserController.#ctor(ApiServer.BLL.IBLL.ISysUserService,ApiServer.BLL.IBLL.ICommonService)">
             <summary>
             
             </summary>
             <param name="sysUserService"></param>
+        </member>
+        <member name="M:ApiServer.Controllers.SysUserController.SignUp(ApiServer.Model.Model.Dto.UserDto)">
+            <summary>
+            注册
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
         </member>
         <member name="M:ApiServer.Controllers.UploadController.#ctor(ApiServer.BLL.IBLL.IOssService)">
             <summary>

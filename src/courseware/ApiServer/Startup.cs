@@ -1,5 +1,5 @@
-﻿using ApiServer.BLL.JWT;
-using ApiServer.Cache.MemoryCache;
+﻿using ApiServer.BLL.IBLL;
+using ApiServer.BLL.JWT;
 using ApiServer.Common;
 using ApiServer.Exception;
 using ApiServer.Mapping;
@@ -77,21 +77,14 @@ namespace ApiServer
             {
                 // SizeLimit缓存是没有大小的，此值设置缓存的份数
                 // 注意：netcore中的缓存是没有单位的，缓存项和缓存的相对关系
-                options.SizeLimit = 2;
+                // options.SizeLimit = 10240;
                 // 缓存满的时候压缩20%的优先级较低的数据
                 options.CompactionPercentage = 0.2;
                 // 两秒钟查找一次过期项
                 options.ExpirationScanFrequency = TimeSpan.FromSeconds(2);
             });
             // 内置缓存注入
-            services.AddTransient<MemoryCacheService>();
-
-            // Redis缓存注入
-            services.AddSingleton(new RedisCacheService(new RedisCacheOptions()
-            {
-                InstanceName = Configuration.GetSection("Redis:InstanceName").Value,
-                Configuration = Configuration.GetSection("Redis:Connection").Value
-            }));
+            // services.AddTransient<MemoryCacheService>();
 
             #endregion
 

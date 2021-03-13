@@ -7,6 +7,9 @@ using ApiServer.Model.Model;
 using ApiServer.Model.Model.Dto;
 using ApiServer.Model.Model.MsgModel;
 using Mapster;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,23 +18,47 @@ namespace ApiServer.BLL.BLL
     public class SysUserService : ISysUserService
     {
         private readonly IBaseService<sys_user> _baseService;
+        private readonly IBaseDal<sys_user> _baseDal;
         private readonly ICommonService _commonService;
         private readonly ISysUserDal _sysUserDal;
         private readonly ISysRoleDal _sysRoleDal;
+        private readonly IMemoryCache _memoryCache;
         private readonly string appid = ConfigTool.Configuration["wxmini:appid"];
         private readonly string secret = ConfigTool.Configuration["wxmini:secret"];
 
         public SysUserService(IBaseService<sys_user> baseService, ICommonService commonService,
-            ISysUserDal sysUserDal)
+            ISysUserDal sysUserDal, IMemoryCache memoryCache, IBaseDal<sys_user> baseDal, ISysRoleDal sysRoleDal)
         {
             _baseService = baseService;
             _commonService = commonService;
             _sysUserDal = sysUserDal;
+            _memoryCache = memoryCache;
+            _baseDal = baseDal;
+            _sysRoleDal = sysRoleDal;
         }
 
         public Result AuthLogin(WXAuth wxAuth)
         {
-            throw new System.NotImplementedException();
+            var wxDecrypt = _commonService.WxDecrypt(wxAuth.encryptedData, wxAuth.sessionId, wxAuth.iv);
+            var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(wxDecrypt);
+            var phoneNumber = dict["phoneNumber"].ToString();
+            var user = _baseDal.GetModel(a => a.phone_number == phoneNumber);
+            if(user != null) // 登录
+            {
+                user.username = null;
+                var userDto = new UserDto();
+                userDto = user.BuildAdapter().AdaptToType<UserDto>();
+                return Result.SUCCESS(Login(userDto));
+
+            } // 注册
+            else
+            {
+                var initPassword = CommonUtils.GetStringRandom(10);
+                var userDto = new UserDto();
+                userDto.phoneNumber = phoneNumber;
+                userDto.password = initPassword;
+                return SignUp(userDto);
+            }
         }
 
         public Result DeleteUser(string uuid)
@@ -41,10 +68,14 @@ namespace ApiServer.BLL.BLL
 
         public string GetSessionId(string code)
         {
-            string url = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
-            url = url.Replace("{0}", appid).Replace("{1}", secret).Replace("{2}", code);
-            // todo
-            return url;
+            string url = $"https://api.weixin.qq.com/sns/jscode2session?appid={appid}&secret={secret}&js_code={code}&grant_type=authorization_code";
+            // 发送get请求
+            var res = HttpUtil.HttpGet(url);
+            var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
+            var uuid = Guid.NewGuid().ToString();
+            // uuid作为键将值dict放入到缓存中
+            _memoryCache.Set("WX_SESSION_ID" + uuid, dict);
+            return uuid;
         }
 
         public UserDto GetUserInfo(string uuid, bool refresh)
@@ -104,9 +135,50 @@ namespace ApiServer.BLL.BLL
             return userDto;
         }
 
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public Result SignUp(UserDto user)
         {
-            throw new System.NotImplementedException();
+            var dict = new Dictionary<string, object>();
+            var uuid = Guid.NewGuid().ToString();
+            user.uuid = uuid;
+            var stringRandom = CommonUtils.GetStringRandom(10);
+            user.username = stringRandom;
+            user.nickname = stringRandom;
+            if(user.phoneNumber != null)
+            {
+                var queryUser = _baseDal.GetModel(a => a.phone_number == user.phoneNumber);
+                if(queryUser == null)
+                {
+                    var sysUser = new sys_user();
+                    sysUser = user.BuildAdapter().AdaptToType<sys_user>();
+                    _baseDal.AddAndSave(sysUser);
+                    var playLoad = new Dictionary<string, object>
+                    {
+                        { "uid", queryUser.id },
+                        { "uname", queryUser.username },
+                        { "role", "接单者" }
+                    };
+
+                    var token = JwtHelper.IssueJwt(playLoad);
+                    dict.Add("token", token);
+                    return Result.SUCCESS(dict);
+                }
+                else
+                {
+                    var userDto = new UserDto();
+                    userDto = queryUser.BuildAdapter().AdaptToType<UserDto>();
+                    // 用户存在直接登录
+                    return Result.SUCCESS(Login(userDto));
+                }
+            }
+            else
+            {
+                return new Result(ResultCode.PARAM_TYPE_BIND_ERROR);
+            }
         }
 
         public UserDto UpdateInfo(sys_user user)
@@ -124,5 +196,6 @@ namespace ApiServer.BLL.BLL
             }
             return dto;
         }
+
     }
 }

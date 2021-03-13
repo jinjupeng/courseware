@@ -14,14 +14,16 @@ namespace ApiServer.Controllers
     public class SysUserController : ControllerBase
     {
         private readonly ISysUserService _sysUserService;
+        private readonly ICommonService _commonService;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="sysUserService"></param>
-        public SysUserController(ISysUserService sysUserService)
+        public SysUserController(ISysUserService sysUserService, ICommonService commonService)
         {
             _sysUserService = sysUserService;
+            _commonService = commonService;
         }
 
         [HttpPost]
@@ -30,12 +32,14 @@ namespace ApiServer.Controllers
         public async Task<IActionResult> Login([FromBody] UserDto user)
         {
             var result = _sysUserService.Login(user);
-            // TODO：生成token
-            user.password = "";
-            user.token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyIiwiZmlkIjoiMSIsInVuIjoiemhhbmdzYW4iLCJzdXAiOiJGYWxzZSIsIm5iZiI6IjE2MTUxOTkwMTEiLCJleHAiOjE2MTc3MTkwMTAsImlzcyI6Imx0LmFtaXM4LjAiLCJhdWQiOiJsdC5hbWlzOC4wIn0.08EeihVX-j7Fs5n0Nz7qepO7Tk0fdcHxr65PfJtP9ng";
             return Ok(await Task.FromResult(Result.SUCCESS(result)));
         }
 
+        /// <summary>
+        /// 注册
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("signUp")]
         [AllowAnonymous]
@@ -59,6 +63,7 @@ namespace ApiServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> UpdateUser([FromBody] sys_user user)
         {
+
             var result = _sysUserService.UpdateInfo(user);
             //todo
             return Ok(await Task.FromResult(Result.SUCCESS(result)));
@@ -70,7 +75,7 @@ namespace ApiServer.Controllers
         public async Task<IActionResult> AuthLogin([FromBody] WXAuth wxAuth)
         {
             var result = _sysUserService.AuthLogin(wxAuth);
-            return Ok(await Task.FromResult(Result.SUCCESS(result)));
+            return Ok(await Task.FromResult(result));
         }
 
         [HttpGet]

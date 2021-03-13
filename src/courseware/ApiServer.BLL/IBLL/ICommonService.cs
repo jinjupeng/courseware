@@ -14,5 +14,7 @@ namespace ApiServer.BLL.IBLL
 
         // 获取当前userDto
         UserDto GetUserDto();
+
+        string WxDecrypt(string encryptedData, string sessionId, string vi);
     }
 }

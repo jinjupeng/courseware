@@ -45,12 +45,13 @@
 			},
 			//获取用户的手机号
 			getPhoneNumber(info) {
+				console.log(info)
 				let wxAuth = {
 					encryptedData: info.detail.encryptedData,
 					iv: info.detail.iv,
 					sessionId: uni.getStorageSync("sessionId")
 				}
-				this.$http("/user/authLogin", "post", wxAuth).then((res) => {
+				this.$http("/sysuser/authLogin", "post", wxAuth).then((res) => {
 					if (res.data.code == 0 && res.data.data.token) {
 						uni.setStorage({
 							key: 'token',
@@ -74,7 +75,7 @@
 				uni.login({
 					provider: 'weixin',
 					success: (res3) => {
-						this.$http("/user/getSessionId", "get", {
+						this.$http("/sysuser/getSessionId", "get", {
 							code: res3.code
 						}).then(res2 => {
 							if (res2.data.data.sessionId) {

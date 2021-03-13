@@ -78,7 +78,7 @@
 							content: "是否确认购买课件?",
 							success: (res) => {
 								if (res.confirm) {
-									this.$http("/cw-order/create", 'post', {
+									this.$http("/cworder/create", 'post', {
 										cwId: row.id,
 										price: row.price
 									}).then((res) => {
@@ -89,7 +89,7 @@
 											})
 										} else {
 											uni.navigateToMiniProgram({
-												appId: 'wxd9634afb01b983c0',
+												appId: 'wx5c980392ebe9216b',
 												path: '/pages/pay/pay',
 												extraData: res.data.data,
 												success(res) {
@@ -111,7 +111,7 @@
 			//loadCourseware 
 			loadCW() {
 				if (!this.finish) {
-					this.$http("/cw-courseware/list", 'get', {
+					this.$http("/cwcourseware/list", 'get', {
 						start: this.start
 					}).then((res) => {
 						if (this.start >= res.data.data.list.length) {
@@ -129,7 +129,7 @@
 				this.userInfo.gender = uf.gender == 0 ? "女" : "男";
 				this.userInfo.nickname = uf.nickName;
 				this.userInfo.portrait = uf.avatarUrl;
-				this.$http("/user/initUserInfo", "post", this.userInfo).then((res) => {
+				this.$http("/sysuser/initUserInfo", "post", this.userInfo).then((res) => {
 					if (res.data.data == true) {
 						this.$store.dispatch('refreshUserInfo')
 					}
@@ -163,7 +163,7 @@
 				}
 			})
 			//加载轮播图
-			this.$http('/cw-courseware/getCarousel', 'get', null).then((res) => {
+			this.$http('/cwcourseware/getCarousel', 'get', null).then((res) => {
 				this.swiperList = res.data.data
 				this.swiperList.forEach((x) => {
 					this.imgList.push(this.getImgPath(x.carouselUrl, false, 1))

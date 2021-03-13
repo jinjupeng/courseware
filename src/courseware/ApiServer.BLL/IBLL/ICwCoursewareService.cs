@@ -12,7 +12,7 @@ namespace ApiServer.BLL.IBLL
         bool UpdateCW(cw_courseware cwCourseware);
         bool DeleteCW(int id);
         cw_courseware GetCW(int id);
-        PageModel<cw_courseware> listCW(int start);
+        PageModel<cw_courseware> ListCW(int pageIndex, int pageSize);
         List<cw_courseware> GetCarousel();
     }
 }

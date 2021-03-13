@@ -1,1 +1,1 @@
-export const cwUrl="http://localhost:5000";
+export const cwUrl="http://localhost:5000/api";

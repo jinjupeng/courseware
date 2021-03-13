@@ -1,16 +1,18 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Text;
 
 namespace ApiServer.Common
 {
     public class CommonUtils
     {
+
         /// <summary>
         /// 生成随机用户名，数字和字母组成
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
-        public string GetStringRandom(int length)
+        public static string GetStringRandom(int length)
         {
             StringBuilder val = new StringBuilder();
             Random random = new Random();
@@ -33,5 +35,6 @@ namespace ApiServer.Common
             }
             return val.ToString();
         }
+
     }
 }

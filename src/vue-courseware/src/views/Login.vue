@@ -54,7 +54,7 @@
                     }
                     if (valid) {
                         this.loading = true
-                        this.$axios.post("/api/sysuser/login", user).then((res) => {
+                        this.$axios.post("/api/api/sysuser/login", user).then((res) => {
                             this.loading=false
                             if (res.data.data && res.data.data.token) {
                                 this.$store.commit('setUserInfo', res.data.data)

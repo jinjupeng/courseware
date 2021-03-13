@@ -19,6 +19,11 @@ namespace ApiServer.DAL.DAL
             return _baseDal.GetModel(a => a.uuid == uuid);
         }
 
+        /// <summary>
+        /// 获取用户权限
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public UserDto GetUserPermission(int userId)
         {
             throw new NotImplementedException();

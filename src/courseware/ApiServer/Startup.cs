@@ -3,6 +3,7 @@ using ApiServer.Common;
 using ApiServer.Exception;
 using ApiServer.Mapping;
 using ApiServer.Model.Entity;
+using ApiServer.Model.Model;
 using ApiServer.Model.Model.MsgModel;
 using ApiServer.Model.Model.OSS;
 using AspNetCoreRateLimit;
@@ -162,7 +163,7 @@ namespace ApiServer
                         {
                             //自定义自己想要返回的数据结果，我这里要返回的是Json对象，通过引用Newtonsoft.Json库进行转换
                             // var payload = JsonConvert.SerializeObject(new { Code = 0, Message = "很抱歉，您无权访问该接口!" });
-                            var payload = JsonConvert.SerializeObject(MsgModel.Error(new CustomException(403, "很抱歉，您无权访问该接口!")));
+                            var payload = JsonConvert.SerializeObject(new Result(ResultCode.PERMISSION_UNAUTHORISE, false));
                             //自定义返回的数据类型
                             context.Response.ContentType = "application/json";
                             //自定义返回状态码，默认为401 我这里改成 200

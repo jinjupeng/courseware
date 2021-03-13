@@ -16,7 +16,7 @@ namespace ApiServer.DAL.DAL
 
         public List<sys_role> ListUserRoles(int userId)
         {
-            var sql = $"select r.* from(select id 'user_id' from user where id = {userId}) t1 natural join sys_users_roles natural join sys_role r; ";
+            var sql = $"SELECT r.* FROM(SELECT id 'user_id' FROM sys_user WHERE id = {userId}) t1 NATURAL JOIN sys_users_roles NATURAL JOIN sys_role r; ";
             var result = _baseDal.ExecSql(sql).ToList();
             return result;
         }

@@ -34,4 +34,6 @@ const router = new VueRouter({
     routes
 })
 
+// 这里判断用户是否需要登录，判断token是否失效
+
 export default router

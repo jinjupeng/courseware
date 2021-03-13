@@ -11,16 +11,20 @@ const http = axios.create({
 
 http.baseURL = base
 
+// 请求
 http.interceptors.request.use(function (config) {
     config.url = base + config.url
     if (localStorage.getItem('token')) {
         config.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
+    }else{ // 如果获取不到token值，则返回到登录页面
+        router.push("/login")
     }
     return config;
 }, function (error) {
     return Promise.reject(error);
 });
 
+// 响应
 http.interceptors.response.use(response => {
     if ((20000 <= response.data.code && response.data.code <= 30000) || response.data.code >= 70003) {
         Message(response.data.message)

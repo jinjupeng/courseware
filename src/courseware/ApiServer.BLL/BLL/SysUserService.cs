@@ -117,7 +117,7 @@ namespace ApiServer.BLL.BLL
         {
             var userDto = new UserDto();
             var userModel = _baseService.GetModel(a => a.username == user.username && a.password == user.password);
-            if (userDto == null)
+            if (userModel == null)
             {
                 throw new CustomException(500, "用户名或密码错误！");
             }

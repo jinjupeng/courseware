@@ -18,4 +18,8 @@
     <ProjectReference Include="..\ApiServer.DAL\ApiServer.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Cache\MemoryCache\" />
+  </ItemGroup>
+
 </Project>

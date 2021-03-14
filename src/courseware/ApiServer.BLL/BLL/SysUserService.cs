@@ -1,13 +1,13 @@
 ﻿using ApiServer.BLL.IBLL;
 using ApiServer.BLL.JWT;
 using ApiServer.Common;
+using ApiServer.Common.Cache;
 using ApiServer.DAL.IDAL;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model;
 using ApiServer.Model.Model.Dto;
 using ApiServer.Model.Model.MsgModel;
 using Mapster;
-using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,12 +22,12 @@ namespace ApiServer.BLL.BLL
         private readonly ICommonService _commonService;
         private readonly ISysUserDal _sysUserDal;
         private readonly ISysRoleDal _sysRoleDal;
-        private readonly IMemoryCache _memoryCache;
+        private readonly ICacheService _memoryCache;
         private readonly string appid = ConfigTool.Configuration["wxmini:appid"];
         private readonly string secret = ConfigTool.Configuration["wxmini:secret"];
 
         public SysUserService(IBaseService<sys_user> baseService, ICommonService commonService,
-            ISysUserDal sysUserDal, IMemoryCache memoryCache, IBaseDal<sys_user> baseDal, ISysRoleDal sysRoleDal)
+            ISysUserDal sysUserDal, ICacheService memoryCache, IBaseDal<sys_user> baseDal, ISysRoleDal sysRoleDal)
         {
             _baseService = baseService;
             _commonService = commonService;
@@ -74,7 +74,7 @@ namespace ApiServer.BLL.BLL
             var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(res);
             var uuid = Guid.NewGuid().ToString();
             // uuid作为键将值dict放入到缓存中
-            _memoryCache.Set("WX_SESSION_ID" + uuid, dict);
+            _memoryCache.Add("WX_SESSION_ID" + uuid, dict);
             return uuid;
         }
 

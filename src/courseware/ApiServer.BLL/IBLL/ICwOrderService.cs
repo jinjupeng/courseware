@@ -1,13 +1,13 @@
 ﻿using ApiServer.Model.Entity;
 using Microsoft.AspNetCore.Http;
-using System;
+using System.Collections.Generic;
 
 namespace ApiServer.BLL.IBLL
 {
     public interface ICwOrderService
     {
 
-        JsonObject CreateOrder(cw_order cwOrder);
-        bool CallBack(JsonObject callback, HttpContext request);
+        Dictionary<string, string> CreateOrder(cw_order cwOrder);
+        bool CallBack(Dictionary<string, string> callback, HttpContext request);
     }
 }

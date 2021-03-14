@@ -1,8 +1,11 @@
 ﻿using ApiServer.BLL.IBLL;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model;
+using ApiServer.Model.Model.MsgModel;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiServer.Controllers
@@ -32,7 +35,14 @@ namespace ApiServer.Controllers
         [Route("list")]
         public async Task<IActionResult> ListKey([FromQuery] int pageIndex = 0, int pageSize = 0)
         {
-            var pageModel = _baseService.QueryByPage(pageIndex, pageSize, _ => true);
+            var data = _baseService.QueryByPage(pageIndex, pageSize, _ => true);
+            var pageModel = new PageModel<cwExchangeKey>
+            {
+                List = data.List.BuildAdapter().AdaptToType<List<cwExchangeKey>>(),
+                PageIndex = data.PageIndex,
+                PageSize = data.PageSize,
+                Size = data.Size
+            };
             var result = Result.SUCCESS(pageModel);
             return Ok(await Task.FromResult(result));
         }

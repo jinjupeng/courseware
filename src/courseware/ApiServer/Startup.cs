@@ -2,12 +2,10 @@
 using ApiServer.BLL.IBLL;
 using ApiServer.BLL.JWT;
 using ApiServer.Common;
-using ApiServer.Common.Cache;
 using ApiServer.Exception;
 using ApiServer.Mapping;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model;
-using ApiServer.Model.Model.MsgModel;
 using ApiServer.Model.Model.OSS;
 using AspNetCoreRateLimit;
 using Autofac;
@@ -19,7 +17,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -80,21 +77,26 @@ namespace ApiServer
             {
                 // SizeLimit缓存是没有大小的，此值设置缓存的份数
                 // 注意：netcore中的缓存是没有单位的，缓存项和缓存的相对关系
-                options.SizeLimit = 10240;
+                options.SizeLimit = 1024;
                 // 缓存满的时候压缩20%的优先级较低的数据
                 options.CompactionPercentage = 0.2;
                 // 两秒钟查找一次过期项
                 options.ExpirationScanFrequency = TimeSpan.FromSeconds(2);
             });
-            // 内置缓存注入
+            // MemoryCache缓存注入
             services.AddTransient<ICacheService, MemoryCacheService>();
 
-            // Redis缓存注入
-            services.AddSingleton(new RedisCacheService(new RedisCacheOptions()
+            #endregion
+
+            #region Redis缓存
+
+            services.AddDistributedRedisCache(options =>
             {
-                InstanceName = Configuration.GetSection("Redis:InstanceName").Value,
-                Configuration = Configuration.GetSection("Redis:Connection").Value
-            }));
+                options.InstanceName = Configuration.GetSection("Redis:InstanceName").Value;
+                options.Configuration = Configuration.GetSection("Redis:Connection").Value;
+            });
+            // Redis缓存注入
+            services.AddSingleton<ICacheService, RedisCacheService>();
 
             #endregion
 

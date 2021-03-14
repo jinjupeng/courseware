@@ -23,7 +23,7 @@ namespace ApiServer.BLL.BLL
         /// <param name="options"></param>
         public RedisCacheService(IOptions<RedisCacheOptions> options)
         {
-            RedisCache = new RedisCache(options.);
+            RedisCache = new RedisCache(options.Value);
         }
 
 

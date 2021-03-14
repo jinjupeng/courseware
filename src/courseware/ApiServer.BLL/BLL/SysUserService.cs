@@ -1,7 +1,6 @@
 ﻿using ApiServer.BLL.IBLL;
 using ApiServer.BLL.JWT;
 using ApiServer.Common;
-using ApiServer.Common.Cache;
 using ApiServer.DAL.IDAL;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model;

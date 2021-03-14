@@ -6,6 +6,7 @@ using ApiServer.Model.Model.MsgModel;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiServer.Controllers
@@ -86,7 +87,9 @@ namespace ApiServer.Controllers
         [Route("get")]
         public async Task<IActionResult> GetCourseware([FromQuery] int id)
         {
-            var result = Result.SUCCESS(_cwCoursewareService.GetCW(id));
+            var cwCourseware = new cwCourseware();
+            cwCourseware = _cwCoursewareService.GetCW(id).BuildAdapter().AdaptToType<cwCourseware>();
+            var result = Result.SUCCESS(cwCourseware);
             return Ok(await Task.FromResult(result));
         }
 
@@ -100,8 +103,15 @@ namespace ApiServer.Controllers
         [Route("list")]
         public async Task<IActionResult> ListCourseware([FromQuery] int pageIndex = 0, int pageSize = 10)
         {
-            var pageModel = _baseService.QueryByPage(pageIndex, pageSize, _ => true);
-            pageModel.List.ForEach(a => { a.url = null; });
+            var data = _baseService.QueryByPage(pageIndex, pageSize, _ => true);
+            data.List.ForEach(a => { a.url = null; });
+            var pageModel = new PageModel<cwCourseware>
+            {
+                List = data.List.BuildAdapter().AdaptToType<List<cwCourseware>>(),
+                PageIndex = data.PageIndex,
+                PageSize = data.PageSize,
+                Size = data.Size
+            };
             var result = Result.SUCCESS(pageModel);
             return Ok(await Task.FromResult(result));
         }
@@ -116,7 +126,14 @@ namespace ApiServer.Controllers
         [Route("listForAdmin")]
         public async Task<IActionResult> ListCoursewareByAdmin([FromQuery] int pageIndex = 0, int pageSize = 10)
         {
-            var pageModel = _baseService.QueryByPage(pageIndex, pageSize, _ => true);
+            var data = _baseService.QueryByPage(pageIndex, pageSize, _ => true);
+            var pageModel = new PageModel<cwCourseware>
+            {
+                List = data.List.BuildAdapter().AdaptToType<List<cwCourseware>>(),
+                PageIndex = data.PageIndex,
+                PageSize = data.PageSize,
+                Size = data.Size
+            };
             var result = Result.SUCCESS(pageModel);
             return Ok(await Task.FromResult(result));
         }
@@ -129,7 +146,9 @@ namespace ApiServer.Controllers
         [Route("getCarousel")]
         public async Task<IActionResult> GetCarousel()
         {
-            var result = Result.SUCCESS(_cwCoursewareService.GetCarousel());
+            var cwCoursewares = new List<cwCourseware>();
+            cwCoursewares = _cwCoursewareService.GetCarousel().BuildAdapter().AdaptToType<List<cwCourseware>>();
+            var result = Result.SUCCESS(cwCoursewares);
             return Ok(await Task.FromResult(result));
         }
 
@@ -141,8 +160,9 @@ namespace ApiServer.Controllers
         [Route("getCarouselForAdmin")]
         public async Task<IActionResult> GetCarouselForAdmin()
         {
-            var cwCoursewares = _cwCoursewareService.GetCarousel();
-            // 如果当前登录用户的角色不是管理员，则将url数据置为null
+            var cwCoursewares = new List<cwCourseware>();
+            cwCoursewares = _cwCoursewareService.GetCarousel().BuildAdapter().AdaptToType<List<cwCourseware>>();
+            // todo:如果当前登录用户的角色不是管理员，则将url数据置为null
             var userId = JwtHelper.LoginUserId(HttpContext);
 
             var result = Result.SUCCESS(cwCoursewares);

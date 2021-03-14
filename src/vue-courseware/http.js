@@ -13,7 +13,6 @@ http.baseURL = base
 
 // 请求
 http.interceptors.request.use(function (config) {
-    config.url = base + config.url
     if (localStorage.getItem('token')) {
         config.headers.Authorization = 'Bearer ' + localStorage.getItem('token')
     }else{ // 如果获取不到token值，则返回到登录页面

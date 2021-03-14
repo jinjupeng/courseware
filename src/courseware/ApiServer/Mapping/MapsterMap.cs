@@ -1,5 +1,6 @@
 ﻿using ApiServer.Model.Entity;
 using ApiServer.Model.Model.Dto;
+using ApiServer.Model.Model.MsgModel;
 using Mapster;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,8 @@ namespace ApiServer.Mapping
             #region 接收前端实体类映射
 
             config.NewConfig<UserDto, sys_user>().NameMatchingStrategy(NameMatchingStrategy.FromCamelCase);
+            config.NewConfig<cwCourseware, cw_courseware>().NameMatchingStrategy(NameMatchingStrategy.FromCamelCase);
+            config.NewConfig<cwOrder, cw_order>().NameMatchingStrategy(NameMatchingStrategy.FromCamelCase);
 
             #endregion
 

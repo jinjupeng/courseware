@@ -3,6 +3,7 @@ using ApiServer.Model.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiServer.Controllers
@@ -28,7 +29,17 @@ namespace ApiServer.Controllers
         public async Task<IActionResult> UploadImg([FromForm] IFormCollection form)
         {
             var url = _ossService.Upload(form);
-            var result = Result.SUCCESS(url);
+            var urlMap = new Dictionary<string, string>();
+            urlMap.Add("url", url);
+            var result = Result.SUCCESS(urlMap);
+            return Ok(await Task.FromResult(result));
+        }
+
+        [HttpGet]
+        [Route("deleteObject")]
+        public async Task<IActionResult> Delete([FromForm] string url)
+        {
+            var result = Result.SUCCESS(_ossService.Delete(url) > 0);
             return Ok(await Task.FromResult(result));
         }
     }

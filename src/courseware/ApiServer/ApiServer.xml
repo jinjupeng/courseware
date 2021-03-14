@@ -143,18 +143,18 @@
             <param name="cwCoursewareService"></param>
             <param name="baseService"></param>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.AddCourseware(ApiServer.Model.Entity.cw_courseware)">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.AddCourseware(ApiServer.Model.Model.MsgModel.cwCourseware)">
             <summary>
             新增
             </summary>
-            <param name="courseware"></param>
+            <param name="cwCourseware"></param>
             <returns></returns>
         </member>
-        <member name="M:ApiServer.Controllers.CwCoursewareController.UpdateCourseware(ApiServer.Model.Entity.cw_courseware)">
+        <member name="M:ApiServer.Controllers.CwCoursewareController.UpdateCourseware(ApiServer.Model.Model.MsgModel.cwCourseware)">
             <summary>
             更新
             </summary>
-            <param name="courseware"></param>
+            <param name="cwCourseware"></param>
             <returns></returns>
         </member>
         <member name="M:ApiServer.Controllers.CwCoursewareController.DeleteCourseware(System.Int32)">

@@ -2,6 +2,8 @@
 using ApiServer.BLL.JWT;
 using ApiServer.Model.Entity;
 using ApiServer.Model.Model;
+using ApiServer.Model.Model.MsgModel;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -32,13 +34,15 @@ namespace ApiServer.Controllers
         /// <summary>
         /// 新增
         /// </summary>
-        /// <param name="courseware"></param>
+        /// <param name="cwCourseware"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("add")]
         [Authorize(Roles = "管理员")]
-        public async Task<IActionResult> AddCourseware([FromBody] cw_courseware courseware)
+        public async Task<IActionResult> AddCourseware([FromBody] cwCourseware cwCourseware)
         {
+            var courseware = new cw_courseware();
+            courseware = cwCourseware.BuildAdapter().AdaptToType<cw_courseware>();
             var result = Result.SUCCESS(_cwCoursewareService.AddCW(courseware));
             return Ok(await Task.FromResult(result));
         }
@@ -46,13 +50,15 @@ namespace ApiServer.Controllers
         /// <summary>
         /// 更新
         /// </summary>
-        /// <param name="courseware"></param>
+        /// <param name="cwCourseware"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("update")]
         [Authorize(Roles = "管理员")]
-        public async Task<IActionResult> UpdateCourseware([FromBody] cw_courseware courseware)
+        public async Task<IActionResult> UpdateCourseware([FromBody] cwCourseware cwCourseware)
         {
+            var courseware = new cw_courseware();
+            courseware = cwCourseware.BuildAdapter().AdaptToType<cw_courseware>();
             var result = Result.SUCCESS(_cwCoursewareService.UpdateCW(courseware));
             return Ok(await Task.FromResult(result));
         }

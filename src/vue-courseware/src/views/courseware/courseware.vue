@@ -351,6 +351,7 @@ export default {
       const formData = new FormData();
       formData.append("file", file);
       uploadFile(formData).then((res) => {
+        // 轮播图地址
         this.courseware.carouselUrl = res.data.data.url;
         params.onSuccess();
       });
@@ -363,7 +364,6 @@ export default {
       await this.$client.putACL(filename, "public-read");
       let url = "/resource/" + filename;
       params.file.url = url;
-      this.courseware.url = url;
       this.fileUrlList.push(url);
       params.onSuccess();
     },
@@ -400,9 +400,8 @@ export default {
     },
     // 提交课程信息
     courseUpload() {
-      console.log(this.courseware);
-      console.log(this.courseware.url);
       if (this.fileUrlList.length > 0) {
+        // 课件可以上传多条
         this.courseware.url = this.fileUrlList.join(";");
         this.$http.post("/cwcourseware/add", this.courseware).then((res) => {
           if (res.data.data && res.data.data === true) {

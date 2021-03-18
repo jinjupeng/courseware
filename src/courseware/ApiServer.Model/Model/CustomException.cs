@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ApiServer.Model.Model.MsgModel
+namespace ApiServer.Model.Model
 {
     public class CustomException : ApplicationException
     {

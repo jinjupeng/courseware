@@ -18,6 +18,12 @@ namespace ApiServer.Controllers
         private readonly ICwExchangeKeyService _cwExchangeKeyService;
         private readonly ICommonService _commonService;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="baseService"></param>
+        /// <param name="cwExchangeKeyService"></param>
+        /// <param name="commonService"></param>
         public CwExchangeKeyController(IBaseService<cw_exchange_key> baseService, ICwExchangeKeyService cwExchangeKeyService, ICommonService commonService)
         {
             _baseService = baseService;

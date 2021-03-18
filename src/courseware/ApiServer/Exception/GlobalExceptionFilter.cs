@@ -1,4 +1,4 @@
-﻿using ApiServer.Model.Model.MsgModel;
+﻿using ApiServer.Model.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,9 +36,9 @@ namespace ApiServer.Exception
         /// <param name="context"></param>
         public void OnException(ExceptionContext context)
         {
-            MsgModel msgModel = new MsgModel
+            var msgModel = new Result
             {
-                isok = false,
+                data = false,
                 code = 500,
                 message = "内部错误" // 错误信息
             };

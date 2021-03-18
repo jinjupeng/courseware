@@ -20,6 +20,7 @@ namespace ApiServer.Controllers
         /// 
         /// </summary>
         /// <param name="sysUserService"></param>
+        /// <param name="commonService"></param>
         public SysUserController(ISysUserService sysUserService, ICommonService commonService)
         {
             _sysUserService = sysUserService;
